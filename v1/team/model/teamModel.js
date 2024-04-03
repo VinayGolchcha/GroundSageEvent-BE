@@ -5,11 +5,9 @@ CREATE TABLE IF NOT EXISTS teams (
     team_size int NOT NULL,
     event_id int NOT NULL,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
-    updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,,
-    FOREIGN KEY (event_id) REFERENCES events(id),
-    PRIMARY KEY (id)
+    updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    FOREIGN KEY (event_id) REFERENCES events (id)
 ) AUTO_INCREMENT = 1111`;
 
 export default teamTable;
-//remove team_id
-//add event_id as a foreign key

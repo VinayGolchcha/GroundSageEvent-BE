@@ -11,7 +11,12 @@ export const createEventQuery=(array) =>{
 }
 
 export const updateEventQuery = (query, array)=> {
-    return pool.query(query, array);
+    try {
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing updateEventQuery:", error);
+        throw error;
+    }
 }
 
 export const getAllEventsQuery = async() =>{
@@ -29,7 +34,7 @@ export const deleteEventQuery = async(array)=>{
         let query = `DELETE FROM events WHERE id = ? AND user_id = ?`
         return pool.query(query, array);
     } catch (error) {
-        console.error("Error executing deleteEvent:", error);
+        console.error("Error executing deleteEventQuery:", error);
         throw err
     }
 }

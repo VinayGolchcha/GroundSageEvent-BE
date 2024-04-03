@@ -94,3 +94,31 @@ export const updateRoleVal = [
     body('delete_access').optional().isInt().withMessage('Invalid delete_access input.').notEmpty().withMessage('Delete access cannot be empty.'),
     body('edit_access').optional().isInt().withMessage('Invalid edit_access input.').notEmpty().withMessage('Read access cannot be empty.'),
 ];
+
+export const addShopVal = [
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('shop_number').notEmpty().withMessage('shop_number cannot be empty.').isInt().withMessage("Invalid shop_number input."),
+    body('description').notEmpty().withMessage('description cannot be empty.').isString().withMessage("Invalid description input."),
+    body('area').notEmpty().withMessage('area cannot be empty.').isInt().withMessage("Invalid area input."),
+    body('rent').notEmpty().withMessage('rent cannot be empty.').isInt().withMessage("Invalid rent input."),
+    body('location').notEmpty().withMessage('location cannot be empty.').isString().withMessage("Invalid location input."),
+    body('status').notEmpty().withMessage('status cannot be empty.').isString().withMessage("Invalid status input."),
+]
+export const updateShopVal = [
+    body('event_id').optional().notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('shop_number').optional().notEmpty().withMessage('shop_number cannot be empty.').isInt().withMessage("Invalid shop_number input."),
+    body('description').optional().notEmpty().withMessage('description cannot be empty.').isString().withMessage("Invalid description input."),
+    body('area').optional().notEmpty().withMessage('area cannot be empty.').isInt().withMessage("Invalid area input."),
+    body('rent').optional().notEmpty().withMessage('rent cannot be empty.').isInt().withMessage("Invalid rent input."),
+    body('location').optional().notEmpty().withMessage('location cannot be empty.').isString().withMessage("Invalid location input."),
+    body('status').optional().notEmpty().withMessage('status cannot be empty.').isString().withMessage("Invalid status input."),
+]
+
+export const deleteShopVal = [
+    param('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input."),
+]
+export const getShopByIdVal = [
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('shop_id').notEmpty().withMessage('shop_id cannot be empty.').isInt().withMessage("Invalid shop id input."),
+]
