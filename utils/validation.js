@@ -58,7 +58,6 @@ export const fetchTeamVal = [
 ]
 
 export const createEventVal = [
-    body('user_id').isInt().withMessage('Invalid user_id input.').notEmpty().withMessage('user_id cannot be empty.'),
     body('event_name').isString().withMessage('Invalid event_name input.').notEmpty().withMessage('Event name cannot be empty.'),
     body('event_description').isString().withMessage('Invalid event_description input.').notEmpty().withMessage('Event description cannot be empty.'),
     body('start_date').notEmpty().withMessage('start_date cannot be empty.').isDate().withMessage("start_date must be a date."), 
@@ -67,7 +66,6 @@ export const createEventVal = [
 
 export const updateEventVal = [
     param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input."),
-    param('user_id').notEmpty().withMessage('user_id cannot be empty.').isInt().withMessage("Invalid user_id input."),
     body('event_name').optional().isString().withMessage('Invalid event_name input.').notEmpty().withMessage('Event name cannot be empty.'),
     body('event_description').optional().isString().withMessage('Invalid event_description input.').notEmpty().withMessage('Event description cannot be empty.'),
     body('start_date').optional().notEmpty().withMessage('start_date cannot be empty.').isDate().withMessage("start_date must be a date."), 
@@ -75,7 +73,6 @@ export const updateEventVal = [
 ];
 export const deleteEventVal = [
     param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input."),
-    param('user_id').notEmpty().withMessage('user_id cannot be empty.').isInt().withMessage("Invalid user_id input."),
 ];
 
 export const createRoleVal = [
