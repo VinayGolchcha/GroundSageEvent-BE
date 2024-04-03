@@ -2,7 +2,7 @@ import pool from "../../../config/db.js"
 
 export const createEventQuery=(array) =>{
     try {
-        let query = `INSERT INTO events (user_id, event_name, event_description, start_date, end_date) VALUES(?,?,?,?,?)`
+        let query = `INSERT INTO events ( event_name, event_description, start_date, end_date) VALUES(?,?,?,?)`
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing createEventQuery:", error);
@@ -31,7 +31,7 @@ export const getAllEventsQuery = async() =>{
 
 export const deleteEventQuery = async(array)=>{
     try {
-        let query = `DELETE FROM events WHERE id = ? AND user_id = ?`
+        let query = `DELETE FROM events WHERE id = ?`
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing deleteEventQuery:", error);
