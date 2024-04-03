@@ -12,8 +12,8 @@ export const createEvent = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const {user_id, event_name, event_description, start_date, end_date} = req.body;
-        await createEventQuery([user_id, event_name, event_description, start_date, end_date])
+        const { event_name, event_description, start_date, end_date} = req.body;
+        await createEventQuery([ event_name, event_description, start_date, end_date])
         return successResponse(res, 'Event created successfully.');
     } catch (error) {
         next(error);
@@ -28,12 +28,10 @@ export const updateEvent = async(req, res, next) => {
             return errorResponse(res, errors.array(), "")
         }
         const id = req.params.id;
-        const user_id = req.params.user_id;
         let table = 'events';
 
         const condition = {
-            id: id,
-            user_id: user_id
+            id: id
         };
         const req_data = req.body;
         let query_values = await createDynamicUpdateQuery(table, condition, req_data)
@@ -56,8 +54,7 @@ export const getAllEvents = async (req, res, next) => {
 export const deleteEvent = async (req, res, next) => {
     try {
         const event_id = req.params.id;
-        const user_id = req.params.user_id;
-        await deleteEventQuery([event_id, user_id]);
+        await deleteEventQuery([event_id]);
         return successResponse(res, 'Event deleted successfully.');
     } catch (error) {
         next(error);
