@@ -8,9 +8,9 @@ import {createEventVal, updateEventVal, deleteEventVal} from '../../../utils/val
 router.use(authenticateToken)
 
 app.post('/create-event',createEventVal, createEvent);
-app.post('/update-event/:id/:user_id',updateEventVal, updateEvent);
+app.post('/update-event/:id',updateEventVal, updateEvent);
 app.get('/get-all-event', getAllEvents);
-app.delete('/delete-event/:id/:user_id',deleteEventVal, deleteEvent);
+app.delete('/delete-event/:id',deleteEventVal, deleteEvent);
 
 app.use("/", router);
 

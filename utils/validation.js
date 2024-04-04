@@ -72,7 +72,7 @@ export const updateEventVal = [
     body('end_date').optional().notEmpty().withMessage('end_date cannot be empty.').isDate().withMessage("end_date must be a date."), 
 ];
 export const deleteEventVal = [
-    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input."),
+    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
 ];
 
 export const createRoleVal = [
