@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery} from '../../helpers/functions.js'
-import {createEventQuery, deleteEventQuery, getAllEventsQuery, updateEventQuery} from '../model/eventQuery.js'
+import {createEventQuery, deleteEventQuery, getAllEventsQuery, getEventQuery, updateEventQuery} from '../model/eventQuery.js'
 dotenv.config();
 
 export const createEvent = async (req, res, next) => {
@@ -33,6 +33,10 @@ export const updateEvent = async(req, res, next) => {
         const condition = {
             id: id
         };
+        const [data] = await getEventQuery([id]);
+        if (data.length==0) {
+            return errorResponse(res, '', 'Data not found.');
+        }
         const req_data = req.body;
         let query_values = await createDynamicUpdateQuery(table, condition, req_data)
         await updateEventQuery(query_values.updateQuery, query_values.updateValues);
@@ -54,6 +58,10 @@ export const getAllEvents = async (req, res, next) => {
 export const deleteEvent = async (req, res, next) => {
     try {
         const event_id = req.params.id;
+        const [data] = await getEventQuery([event_id]);
+        if (data.length==0) {
+            return errorResponse(res, '', 'Data not found.');
+        }
         await deleteEventQuery([event_id]);
         return successResponse(res, 'Event deleted successfully.');
     } catch (error) {

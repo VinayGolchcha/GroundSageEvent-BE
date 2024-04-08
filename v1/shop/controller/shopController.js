@@ -12,7 +12,6 @@ export const createShop = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        console.log(req.body);
         const {event_id, shop_number, description, area, rent, location, status} = req.body;
         await createShopQuery([event_id, shop_number, description, area, rent, location, status])
         return successResponse(res, 'Shop created successfully.');
@@ -36,6 +35,10 @@ export const updateShop = async(req, res, next) => {
             id: shop_id,
             event_id: event_id
         };
+        const [data] = await getShopsQuery([shop_id, event_id]);
+        if(data.length==0){
+            return notFoundResponse(res, "", "Data not found.");
+        }
         const req_data = req.body; //shop_number, description, area, rent, location, status, images
         let query_values = await createDynamicUpdateQuery(table, condition, req_data)
         await updateShopQuery(query_values.updateQuery, query_values.updateValues);

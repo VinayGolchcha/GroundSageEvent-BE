@@ -102,7 +102,8 @@ export const addShopVal = [
     body('status').notEmpty().withMessage('status cannot be empty.').isString().withMessage("Invalid status input."),
 ]
 export const updateShopVal = [
-    body('event_id').optional().notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input."),
+    param('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
     body('shop_number').optional().notEmpty().withMessage('shop_number cannot be empty.').isInt().withMessage("Invalid shop_number input."),
     body('description').optional().notEmpty().withMessage('description cannot be empty.').isString().withMessage("Invalid description input."),
     body('area').optional().notEmpty().withMessage('area cannot be empty.').isInt().withMessage("Invalid area input."),
@@ -118,4 +119,39 @@ export const deleteShopVal = [
 export const getShopByIdVal = [
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
     body('shop_id').notEmpty().withMessage('shop_id cannot be empty.').isInt().withMessage("Invalid shop id input."),
+]
+// addTransactionVal,updateTransactionVal, deleteTransactionVal, fetchTransactionVal
+
+export const addTransactionVal = [
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('tag').notEmpty().withMessage('tag cannot be empty.').isString().withMessage("Invalid tag input.").isIn(['income', 'expense']).withMessage('Tag must be either "income" or "expense".'),
+    body('type').notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
+    body('item').notEmpty().withMessage('item cannot be empty.').isString().withMessage("Invalid item input."),
+    body('decided_amount').optional().notEmpty().withMessage('decided_amount cannot be empty.').isInt().withMessage("Invalid decided_amount input."),
+    body('entered_amount').notEmpty().withMessage('entered_amount cannot be empty.').isInt().withMessage("Invalid entered_amount input."),
+    body('outstanding_amount').notEmpty().withMessage('outstanding_amount cannot be empty.').isInt().withMessage("Invalid outstanding_amount input."),
+    body('remarks').notEmpty().withMessage('remarks cannot be empty.').isString().withMessage("Invalid remarks input."),
+]
+
+export const fetchTransactionVal = [
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('transaction_id').notEmpty().withMessage('transaction_id cannot be empty.').isInt().withMessage("Invalid transaction_id input.")
+]
+export const deleteTransactionVal = [
+    param('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    param('id').notEmpty().withMessage('transaction_id cannot be empty.').isInt().withMessage("Invalid transaction_id input.")
+]
+export const updateTransactionVal = [
+    param('id').notEmpty().withMessage('transaction_id cannot be empty.').isInt().withMessage("Invalid transaction_id input."),
+    param('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('tag').optional().notEmpty().withMessage('tag cannot be empty.').isString().withMessage("Invalid tag input.").isIn(['income', 'expense']).withMessage('Tag must be either "income" or "expense".'),
+    body('type').optional().notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
+    body('item').optional().notEmpty().withMessage('item cannot be empty.').isString().withMessage("Invalid item input."),
+    body('decided_amount').optional().notEmpty().withMessage('decided_amount cannot be empty.').isInt().withMessage("Invalid decided_amount input."),
+    body('entered_amount').optional().notEmpty().withMessage('entered_amount cannot be empty.').isInt().withMessage("Invalid entered_amount input."),
+    body('outstanding_amount').optional().notEmpty().withMessage('outstanding_amount cannot be empty.').isInt().withMessage("Invalid outstanding_amount input."),
+    body('remarks').optional().notEmpty().withMessage('remarks cannot be empty.').isString().withMessage("Invalid remarks input."),
+]
+export const fetchAllTransactionVal = [
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
 ]

@@ -8,8 +8,8 @@ import {addShopVal, updateShopVal, deleteShopVal, getShopByIdVal} from '../../..
 router.use(authenticateToken);
 
 app.post('/create-shop',addShopVal, createShop);
-app.put('/update-shop/:id',updateShopVal, updateShop);
-app.delete('/delete-shop',deleteShopVal, deleteShop);
+app.put('/update-shop/:id/:event_id',updateShopVal, updateShop);
+app.delete('/delete-shop/:id/:event_id',deleteShopVal, deleteShop);
 app.get('/fetch-all-shop', getAllShops);
 app.get('/fetch-shop',getShopByIdVal, getShopById);
 

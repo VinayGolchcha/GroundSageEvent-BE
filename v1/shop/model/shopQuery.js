@@ -28,10 +28,10 @@ export const getAllShopsQuery = async() =>{
         throw error;
     }
 }
-export const getShopsQuery = async() =>{
+export const getShopsQuery = async(array) =>{
     try {
         let query = `SELECT * FROM shops  WHERE id = ? AND event_id = ?`
-        return pool.query(query);
+        return pool.query(query, array);
     } catch (error) {
         console.error("Error executing getShopsQuery:", error);
         throw error;

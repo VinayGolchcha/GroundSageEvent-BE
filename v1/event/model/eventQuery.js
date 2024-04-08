@@ -28,6 +28,15 @@ export const getAllEventsQuery = async() =>{
         throw error;
     }
 }
+export const getEventQuery = async(array) =>{
+    try {
+        let query = `SELECT * FROM events WHERE id = ?`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing getEventQuery:", error);
+        throw error;
+    }
+}
 
 export const deleteEventQuery = async(array)=>{
     try {
