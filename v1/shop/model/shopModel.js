@@ -2,7 +2,7 @@ const shopTable = `
 CREATE TABLE IF NOT EXISTS shops (
     id int NOT NULL AUTO_INCREMENT,
     event_id int NOT NULL,
-    shop_number int NOT NULL,
+    shop_number int NOT NULL UNIQUE,
     description text NOT NULL,
     area varchar(255) NOT NULL,
     rent int NOT NULL,
