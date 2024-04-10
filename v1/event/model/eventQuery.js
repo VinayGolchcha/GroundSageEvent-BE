@@ -9,6 +9,15 @@ export const createEventQuery=(array) =>{
         throw error;
     }
 }
+export const getLastEventIdQuery=() =>{
+    try {
+        let query = `SELECT id FROM events ORDER BY id DESC LIMIT 1`
+        return pool.query(query);
+    } catch (error) {
+        console.error("Error executing getLastEventIdQuery:", error);
+        throw error;
+    }
+}
 
 export const updateEventQuery = (query, array)=> {
     try {

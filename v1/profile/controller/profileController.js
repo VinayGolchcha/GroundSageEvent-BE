@@ -15,7 +15,7 @@ export const userRegistration = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const { username, email, password, role_id, team_id } = req.body;
+        const { username, email, password } = req.body;
         const [existingUser] = await userDetailQuery([email]);
         if (existingUser.length) {
             return errorResponse(res, '', 'User with this email already exists.');
@@ -25,11 +25,7 @@ export const userRegistration = async (req, res, next) => {
             username,
             email,
             password_hash,
-            role_id, 
-            team_id,
-            1,
-            new Date(),
-            new Date(),
+            1
         ]);
         return successResponse(res, "", 'User successfully registered');
     } catch (error) {

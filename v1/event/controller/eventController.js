@@ -2,7 +2,8 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery} from '../../helpers/functions.js'
-import {createEventQuery, deleteEventQuery, getAllEventsQuery, getEventQuery, updateEventQuery} from '../model/eventQuery.js'
+import {createEventQuery, deleteEventQuery, getAllEventsQuery, getEventQuery, getLastEventIdQuery, updateEventQuery} from '../model/eventQuery.js'
+import { addTeamQuery } from "../../team/model/teamQuery.js"
 dotenv.config();
 
 export const createEvent = async (req, res, next) => {
@@ -12,9 +13,11 @@ export const createEvent = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const { event_name, event_description, start_date, end_date} = req.body;
+        const { event_name, event_description, start_date, end_date, team_name, team_size} = req.body;
         await createEventQuery([ event_name, event_description, start_date, end_date])
-        return successResponse(res, 'Event created successfully.');
+        const [event_id] = await getLastEventIdQuery();
+        await addTeamQuery([team_name, team_size, event_id[0].id]);
+        return successResponse(res, 'Event and team created successfully.');
     } catch (error) {
         next(error);
     }
