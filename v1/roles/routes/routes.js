@@ -1,14 +1,16 @@
 import express, { Router } from 'express';
 const app = express()
 const router = Router();
-
 import authenticateToken from '../../../middlewares/auth.js';
-import {createRole, updateRole} from '../controller/roleController.js';
-import {createRoleVal, updateRoleVal} from '../../../utils/validation.js';
-router.use(authenticateToken)
+import {addRoles, updateRoles, deleteRoles, fetchAllRoles, fetchRoles} from '../controller/roleController.js';
+import {addRolesVal, updateRolesVal, deleteRolesVal} from '../../../utils/validation.js';
+router.use(authenticateToken);
 
-app.post('/create-role',createRoleVal, createRole);
-app.post('/update-role/:id',updateRoleVal, updateRole);
+app.post('/add-roles',addRolesVal, addRoles);
+app.put('/update-role/:id',updateRolesVal,updateRoles);
+app.delete('/delete-roles',deleteRolesVal, deleteRoles);
+app.get('/fetch-roles', fetchRoles);
+app.get('/fetch-all-roles', fetchAllRoles);
 
 app.use("/", router);
 
