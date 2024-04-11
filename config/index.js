@@ -6,5 +6,7 @@ import roleTable from "../v1/roles/model/roleModel.js";
 import shopTable from "../v1/shop/model/shopModel.js";
 import shopImagesTable from "../v1/shop/model/shopImagesModel.js";
 import transactionTable from "../v1/transactions/model/transactionModel.js";
+ import rentalAgreementTable from "../v1/rental agreement/model/rentalAgreementModel.js";
+import tenantTable from "../v1/tenant/model/tenantModel.js";
 
-export default [eventTable, teamTable, roleTable, profileTable,userEventTable,shopTable, shopImagesTable, transactionTable];
+export default [ eventTable,teamTable, roleTable, profileTable,shopTable, shopImagesTable, transactionTable,tenantTable,rentalAgreementTable];
