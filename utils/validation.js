@@ -50,8 +50,9 @@ export const updateTeamVal = [
 ]
 
 export const deleteTeamVal = [
-    body('id').isInt().withMessage('Invalid team_name input.').notEmpty().withMessage('Team name cannot be empty.')
+    body('team_id').isInt().withMessage('Invalid team_name input.').notEmpty().withMessage('Team name cannot be empty.')
 ]
+
 
 export const fetchTeamVal = [
     body('id').isInt().withMessage('Invalid team_name input.').notEmpty().withMessage('Team name cannot be empty.')
@@ -75,22 +76,6 @@ export const deleteEventVal = [
     param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
 ];
 
-export const createRoleVal = [
-    body('role_name').isString().withMessage('Invalid role_name input.').notEmpty().withMessage('Role name cannot be empty.'),
-    body('read_access').isInt().withMessage('Invalid read_access input.').notEmpty().withMessage('Read access cannot be empty.'),
-    body('write_access').isInt().withMessage('Invalid write_access input.').notEmpty().withMessage('Write access cannot be empty.'),
-    body('delete_access').isInt().withMessage('Invalid delete_access input.').notEmpty().withMessage('Delete access cannot be empty.'),
-    body('edit_access').isInt().withMessage('Invalid edit_access input.').notEmpty().withMessage('Read access cannot be empty.'),
-];
-
-export const updateRoleVal = [
-    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input."),
-    body('role_name').isString().withMessage('Invalid role_name input.').notEmpty().withMessage('Role name cannot be empty.'),
-    body('read_access').optional().isInt().withMessage('Invalid read_access input.').notEmpty().withMessage('Read access cannot be empty.'),
-    body('write_access').optional().isInt().withMessage('Invalid write_access input.').notEmpty().withMessage('Write access cannot be empty.'),
-    body('delete_access').optional().isInt().withMessage('Invalid delete_access input.').notEmpty().withMessage('Delete access cannot be empty.'),
-    body('edit_access').optional().isInt().withMessage('Invalid edit_access input.').notEmpty().withMessage('Read access cannot be empty.'),
-];
 
 export const addShopVal = [
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
@@ -155,3 +140,57 @@ export const updateTransactionVal = [
 export const fetchAllTransactionVal = [
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
 ]
+export const addRolesVal = [
+    body('role_name').isString().withMessage('Invalid role name input.').notEmpty().withMessage('role name cannot be empty.'),
+    body('read_access').isBoolean().withMessage('Invalid read access input.').notEmpty().withMessage('read access cannot be empty.'),
+    body('write_access').isBoolean().withMessage('Invalid write access input.').notEmpty().withMessage('write access cannot be empty.'),
+    body('edit_access').isBoolean().withMessage('Invalid edit access input.').notEmpty().withMessage('  edit access cannot be empty.'),
+    body('delete_access').isBoolean().withMessage('Invalid delete access input.').notEmpty().withMessage('delete access cannot be empty.')
+     
+]
+  export const updateRolesVal = [
+     param('id').isInt().withMessage('Invalid id input.').notEmpty().withMessage(' id cannot be empty.'),
+     body('role_name').optional().isString().withMessage('Invalid role_name input.').notEmpty().withMessage('role name cannot be empty.'),
+     body('read_access').optional().isBoolean().withMessage('Read access must be a boolean value.'),
+     body('write_access').optional().isBoolean().withMessage('Write access must be a boolean value.'),
+     body('edit_access').optional().isBoolean().withMessage('Edit access must be a boolean value.'),
+     body('delete_access').optional().isBoolean().withMessage('Delete access must be a boolean value.')  
+ ]
+
+export const deleteRolesVal = [
+    body('_id').notEmpty().withMessage('id is required.')
+
+ ]
+ export const addRentalAndTenantAgreementVal= [
+    body('shop_id').isInt().withMessage('Invalid shop_id input.').notEmpty().withMessage(' shop id cannot be empty.'),
+    body('tenant_id').isInt().withMessage('Invalid tenant_id input.').notEmpty().withMessage(' tenant id cannot be empty.'),
+    body('rent_amount').isInt().withMessage('Invalid rent amount input.').notEmpty().withMessage(' rent amount cannot be empty.'),
+    body('id_document').isURL().withMessage('Invalid id document input.').notEmpty().withMessage(' id document cannot be empty.'),
+    body('start_date').isDate().withMessage('Invalid start date input.').notEmpty().withMessage(' shop id cannot be empty.'),
+    body('end_date').isDate().withMessage('Invalid end date input.').notEmpty().withMessage(' start date cannot be empty.'),
+    body('rent_mode').isIn(['day','week','month']).withMessage('Invalid rent mode input.').notEmpty().withMessage(' rent mode cannot be empty.'),
+    body('phone_number').isLength({ min: 10, max: 15 }).withMessage('Invalid phone number input.').notEmpty().withMessage(' phone number cannot be empty.'),
+    body('name').isString().withMessage('Invalid name input.').notEmpty().withMessage(' name cannot be empty.'),
+    body('email').isEmail().withMessage('Invalid email input.').notEmpty().withMessage(' email cannot be empty.'),
+    body('address').isString().withMessage('Invalid address input.').notEmpty().withMessage(' address cannot be empty.')
+ ]
+
+ export const fetchRentalAgreementVal =[
+    body('shop_id').notEmpty().withMessage('shop_id cannot be empty.').isInt().withMessage("Invalid shop_id input."),
+    body('_id').notEmpty().withMessage('_id cannot be empty.').isInt().withMessage("Invalid _id input.")
+ ]
+    
+ export const editRentalAgreementVal =[
+    param('shop_id').isInt().withMessage('Invalid shop id input.').notEmpty().withMessage(' shop id cannot be empty.'),
+    param('id').isInt().withMessage('Invalid  id input.').notEmpty().withMessage('  id cannot be empty.'),
+    body('start_date').optional().isDate().withMessage('Invalid date input.').notEmpty().withMessage(' date cannot be empty.'),
+    body('end_date').optional().isDate().withMessage('Invalid date input.').notEmpty().withMessage(' date cannot be empty.'),
+    body('rent_amount').optional().isInt().withMessage('Invalid rent amount input.').notEmpty().withMessage(' rent amount cannot be empty.')
+ ]
+ export const deleteRentalAgreementVal =[
+    body('_id').isInt().withMessage('Invalid _id input.').notEmpty().withMessage(' id cannot be empty.'),
+ ]
+
+ 
+
+ 

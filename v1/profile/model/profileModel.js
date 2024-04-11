@@ -16,4 +16,3 @@ CREATE TABLE IF NOT EXISTS profiles (
 
 export default profileTable;
 
-//add team_id and role_id as array
