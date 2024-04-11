@@ -31,7 +31,7 @@ export const fetchAllTeams = async (req, res, next) => {
   }
 };
 
-export const fetchTeams = async (req, res, next) => {
+export const fetchTeam = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
