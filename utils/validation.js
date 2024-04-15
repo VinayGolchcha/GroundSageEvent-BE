@@ -191,6 +191,24 @@ export const deleteRolesVal = [
     body('_id').isInt().withMessage('Invalid _id input.').notEmpty().withMessage(' id cannot be empty.'),
  ]
 
+ export const createNoteVal = [
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('user_id').notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input."),
+    body('notes_description').notEmpty().withMessage('note description cannot be empty.').isString().withMessage("Invalid  note description input."),
+    body('notes_heading').notEmpty().withMessage('note heading cannot be empty.').isString().withMessage("Invalid note heading input."),
+    body('date').notEmpty().withMessage('date cannot be empty.').isDate().withMessage("Invalid date input."),
+ ]
+ export const deleteNoteVal =[
+    param('id').isInt().withMessage('Invalid _id input.').notEmpty().withMessage(' id cannot be empty.'),
+ ]
+ export const updateNoteVal =[
+    param('id').isInt().withMessage('Invalid   note id input.').notEmpty().withMessage('  id cannot be empty.'),
+    body('date').optional().isDate().withMessage('Invalid date input.').notEmpty().withMessage(' date cannot be empty.'),
+    body('notes_heading').optional().isString().withMessage('Invalid note heading input.').notEmpty().withMessage(' note heading cannot be empty.'),
+    body('notes_description').optional().isString().withMessage('Invalid note description input.').notEmpty().withMessage(' note description cannot be empty.')
+ ]
+
+
  
 
  

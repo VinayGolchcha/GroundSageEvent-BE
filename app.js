@@ -10,6 +10,7 @@ import roleRoutes from './v1/roles/routes/routes.js'
 import shopRoutes from './v1/shop/routes/routes.js'
 import transactionRoutes from './v1/transactions/routes/routes.js'
 import rentalAgreementRoutes from './v1/rental agreement/routes/routes.js';
+import noteRoutes from './v1/notes/routes/routes.js';
 const app = express();
 config();
 app.use(json());
@@ -23,7 +24,7 @@ app.use('/api/v1/event', eventRoutes);
 app.use('/api/v1/role', roleRoutes);
 app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/transaction', transactionRoutes);
-app.use('/api/v1/rentalagreement',rentalAgreementRoutes);
+app.use('/api/v1/note',noteRoutes);
 
 
 app.use('/', (req, res) => {
