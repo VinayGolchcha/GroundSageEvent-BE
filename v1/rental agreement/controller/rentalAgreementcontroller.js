@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
-import { addRentalAndTenantAgreementQuery, fetchRentalAgreementQuery, editRentalAgreementQuery, deleteRentalAgreementQuery, deleteTenantQuery } from "../model/rentalAgreementQuery.js";
+import { addRentalAndTenantAgreementQuery, fetchRentalAgreementQuery, editRentalAgreementQuery, deleteRentalAgreementQuery } from "../model/rentalAgreementQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
@@ -44,12 +44,12 @@ export const editRentalAgreement = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const req_data = req.body; // team_name, team_size
-    const shop_id = req.params.shop_id;
+    const req_data = req.body; 
+    const shop_id = req.params.shopid;
     const _id = req.params.id;
     const condition = {
-      shop_id: shop_id,
-      _id: _id
+      shopid: shop_id,
+      id: _id
     };
     const query_values = await createDynamicUpdateQuery("rentalagreements", condition, req_data);
     await editRentalAgreementQuery(query_values.updateQuery, query_values.updateValues);
@@ -72,16 +72,4 @@ export const deleteRentalAgreement = async (req, res, next) => {
   }
 };
 
-export const deleteTenant = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "");
-    }
-    const { _id } = req.body;
-    await deleteTenantQuery([_id]);
-    return successResponse(res, "", "Tenant details deleted successfully");
-  } catch (error) {
-    next(error);
-  }
-};
+

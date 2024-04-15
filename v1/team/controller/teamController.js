@@ -11,8 +11,8 @@ export const addTeam = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { team_name, team_size } = req.body;
-    const [data] = await addTeamQuery([team_name, team_size]);
+    const { team_name, team_size ,event_id} = req.body;
+    const [data] = await addTeamQuery([team_name, team_size,event_id]);
     return successResponse(res, data, "Team successfully registered");
   } catch (error) {
     next(error);

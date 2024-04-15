@@ -43,13 +43,4 @@ export const deleteRentalAgreementQuery = async (_id) => {
   }
 };
 
-//delete tenant query
-export const deleteTenantQuery = async (_id) => {
-  try {
-    let query = `DELETE FROM tenants WHERE _id = ? `;
-    return await pool.query(query, [_id]);
-  } catch (error) {
-    console.error("Error executing deleteTenanatQuery :", error);
-    throw error;
-  }
-};
+

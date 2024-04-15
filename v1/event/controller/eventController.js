@@ -12,8 +12,8 @@ export const createEvent = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const { event_name, event_description, start_date, end_date} = req.body;
-        await createEventQuery([ event_name, event_description, start_date, end_date])
+        const {user_id, event_name, event_description, start_date, end_date} = req.body;
+        await createEventQuery([ user_id,event_name, event_description, start_date, end_date])
         return successResponse(res, 'Event created successfully.');
     } catch (error) {
         next(error);

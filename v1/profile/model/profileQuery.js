@@ -10,12 +10,10 @@ export const userRegistrationQuery = (array) => {
         username,
         email,
         password,
-        role_id, 
-        team_id,
         is_registered,
         created_at,
         updated_at
-        ) VALUES (?,?,?,?,?,?);`
+        ) VALUES (?,?,?,?);`
     return pool.query(query, array);
 }
 
