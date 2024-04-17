@@ -9,7 +9,7 @@ import eventRoutes from './v1/event/routes/routes.js'
 import roleRoutes from './v1/roles/routes/routes.js'
 import shopRoutes from './v1/shop/routes/routes.js'
 import transactionRoutes from './v1/transactions/routes/routes.js'
-import rentalAgreementRoutes from './v1/rental agreement/routes/routes.js';
+import rentalAgreementRoutes from './v1/rentalAgreement/routes/routes.js';
 import noteRoutes from './v1/notes/routes/routes.js';
 const app = express();
 config();
