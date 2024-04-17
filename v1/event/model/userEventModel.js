@@ -1,5 +1,5 @@
 const userEventTable = `
-CREATE TABLE IF NOT EXISTS user_events (
+CREATE TABLE IF NOT EXISTS userEvents (
     id int NOT NULL AUTO_INCREMENT,
     user_id int NOT NULL,
     event_id int NOT NULL,

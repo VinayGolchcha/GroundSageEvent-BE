@@ -25,6 +25,7 @@ app.use('/api/v1/role', roleRoutes);
 app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/transaction', transactionRoutes);
 app.use('/api/v1/note',noteRoutes);
+app.use('/api/v1/rentalagreement',rentalAgreementRoutes);
 
 
 app.use('/', (req, res) => {

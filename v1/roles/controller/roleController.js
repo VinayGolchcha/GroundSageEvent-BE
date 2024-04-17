@@ -5,12 +5,13 @@ import { addRoleQuery, fetchAllRolesQuery, getLastRolesIdQuery, fetchRoleQuery, 
 import {incrementId,createDynamicUpdateQuery} from "../../helpers/functions.js";
 dotenv.config();
 
+
 export const addRole = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return errorResponse(res, errors.array(), "");
-  }
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return errorResponse(res, errors.array(), "");
+    }
     const {role_name,read_access, write_access, edit_access,delete_access } = req.body;
     await addRoleQuery([role_name,read_access,write_access,edit_access,delete_access]);
     return successResponse(res, "", "Roles successfully registered");
@@ -39,7 +40,7 @@ export const deleteRole = async (req, res, next) => {
   try {
     const { _id } = req.body;
     await deleteRoleQuery(_id);
-    return successResponse(res, "", "roles deleted successfully");
+    return successResponse(res, "", "role deleted successfully");
   } catch (error) {
     next(error);
   }
@@ -51,12 +52,12 @@ export const fetchRole = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { _id } = req.body;
-    const [data] = await fetchRoleQuery(_id);
+    const _id  = req.params.id;
+    const [data] = await fetchRolesQuery(_id);
     if (data.length == 0) {
       return errorResponse(res, "", "Data not found.");
     }
-    return successResponse(res, data, "Roles data fetched successfully");
+    return successResponse(res, data, "Role data fetched successfully");
   } catch (error) {
     next(error);
   }
@@ -70,12 +71,16 @@ export const updateRole= async (req, res, next) => {
     }
     const req_data = req.body;
     const id = req.params.id;
+    const [data] = await fetchRolesQuery(id);
+    if (data.length == 0) {
+      return errorResponse(res, "", "Data not found.");
+    }
     const condition = {
       _id: id,
     };
     const query_values = await createDynamicUpdateQuery("roles", condition, req_data);
-    await updateRoleQuery(query_values.updateQuery, query_values.updateValues);
-    return successResponse(res, "roles updated successfully");
+    await updateRolesQuery(query_values.updateQuery, query_values.updateValues);
+    return successResponse(res, "Role updated successfully");
   } catch (error) {
     next(error);
   }

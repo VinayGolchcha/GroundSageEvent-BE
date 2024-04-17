@@ -2,7 +2,6 @@ import pool from "../../../config/db.js";
 
 
 export const addRentalAndTenantAgreementQuery = async (array1, array2) => {
-  console.log("calledd");
   try {
     let query1 = `INSERT INTO tenants(name,email,phone_number,address,id_document) VALUES (?,?,?,?,?)`;
     let query2 = `INSERT INTO Rentalagreements (shop_id,tenant_id,start_date,end_date,rent_amount,rent_mode,event_id) VALUES (?,?,?,?,?,?,?)`;
@@ -42,5 +41,3 @@ export const deleteRentalAgreementQuery = async (_id) => {
     throw error;
   }
 };
-
-

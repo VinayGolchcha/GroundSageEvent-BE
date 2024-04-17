@@ -58,6 +58,7 @@ export const editRentalAgreement = async (req, res, next) => {
     next(error);
   }
 };
+
 export const deleteRentalAgreement = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -71,5 +72,3 @@ export const deleteRentalAgreement = async (req, res, next) => {
     next(error);
   }
 };
-
-
