@@ -6,10 +6,10 @@ import {addRoles, updateRoles, deleteRoles, fetchAllRoles, fetchRoles} from '../
 import {addRolesVal, updateRolesVal, deleteRolesVal} from '../../../utils/validation.js';
 router.use(authenticateToken);
 
-app.post('/add-roles',addRolesVal, addRoles);
+app.post('/add-role',addRolesVal, addRoles);
 app.put('/update-role/:id',updateRolesVal,updateRoles);
-app.delete('/delete-roles',deleteRolesVal, deleteRoles);
-app.get('/fetch-roles', fetchRoles);
+app.delete('/delete-role/:id',deleteRolesVal, deleteRoles);
+app.get('/fetch-role', fetchRoles);
 app.get('/fetch-all-roles', fetchAllRoles);
 
 app.use("/", router);

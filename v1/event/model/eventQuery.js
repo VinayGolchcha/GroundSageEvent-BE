@@ -9,12 +9,49 @@ export const createEventQuery=(array) =>{
         throw error;
     }
 }
+export const insertUserEventQuery=(array) =>{
+    try {
+        let query = `INSERT INTO userEvents (user_id, event_id) VALUES(?,?)`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing insertUserEventQuery:", error);
+        throw error;
+    }
+}
+
+export const insertUserTeamQuery=(array) =>{
+    try {
+        let query = `INSERT INTO userTeams (user_id, team_id, role_id) VALUES(?,?,?)`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing insertUserTeamQuery:", error);
+        throw error;
+    }
+}
 export const getLastEventIdQuery=() =>{
     try {
         let query = `SELECT id FROM events ORDER BY id DESC LIMIT 1`
         return pool.query(query);
     } catch (error) {
         console.error("Error executing getLastEventIdQuery:", error);
+        throw error;
+    }
+}
+export const getLastTeamIdQuery=() =>{
+    try {
+        let query = `SELECT id FROM teams ORDER BY id DESC LIMIT 1`
+        return pool.query(query);
+    } catch (error) {
+        console.error("Error executing getLastTeamIdQuery:", error);
+        throw error;
+    }
+}
+export const getRoleIdQuery= async(array) =>{
+    try {
+        let query = `SELECT _id FROM roles WHERE role_name = ?`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing getRoleIdQuery:", error);
         throw error;
     }
 }

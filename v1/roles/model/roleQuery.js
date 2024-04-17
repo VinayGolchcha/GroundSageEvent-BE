@@ -20,7 +20,6 @@ export const fetchAllRolesQuery = () => {
 };
 export const fetchRolesQuery = (array) => {
   try {
-    console.log("_id", array);
     let query = `SELECT *  FROM roles WHERE _id = ?`;
     return pool.query(query, array);
   } catch (error) {

@@ -5,20 +5,6 @@ import { addTeamQuery, fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, dele
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
-// export const addTeam = async(req, res, next) =>{
-//     try {
-//         const errors = validationResult(req);
-//         if (!errors.isEmpty()) {
-//             return errorResponse(res, errors.array(), "")
-//         }
-//         const {team_name, team_size, event_id} = req.body;
-//         const [data]= await addTeamQuery([team_name, team_size, event_id]);
-//         return successResponse(res, data, 'Team successfully registered');
-//     } catch (error) {
-//         next(error);
-//     }
-// }
-
 export const fetchAllTeams = async (req, res, next) => {
   try {
     const [data] = await fetchAllTeamsQuery();

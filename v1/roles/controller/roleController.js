@@ -4,6 +4,7 @@ import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse 
 import { addRolesQuery, fetchAllRolesQuery, getLastRolesIdQuery, fetchRolesQuery, updateRolesQuery, deleteRolesQuery } from "../model/roleQuery.js";
 import {incrementId,createDynamicUpdateQuery} from "../../helpers/functions.js";
 dotenv.config();
+
 export const addRoles = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -48,7 +49,7 @@ export const fetchRoles = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { _id } = req.body;
+    const _id  = req.params.id;
     const [data] = await fetchRolesQuery(_id);
     if (data.length == 0) {
       return errorResponse(res, "", "Data not found.");
@@ -67,10 +68,14 @@ export const updateRoles= async (req, res, next) => {
     }
     const req_data = req.body;
     const id = req.params.id;
+    const [data] = await fetchRolesQuery(id);
+    if (data.length == 0) {
+      return errorResponse(res, "", "Data not found.");
+    }
     const condition = {
       _id: id,
     };
-    const query_values = await createDynamicUpdateQuery("Roles", condition, req_data);
+    const query_values = await createDynamicUpdateQuery("roles", condition, req_data);
     await updateRolesQuery(query_values.updateQuery, query_values.updateValues);
     return successResponse(res, "roles updated successfully");
   } catch (error) {

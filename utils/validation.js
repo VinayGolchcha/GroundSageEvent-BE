@@ -158,7 +158,7 @@ export const addRolesVal = [
  ]
 
 export const deleteRolesVal = [
-    body('_id').notEmpty().withMessage('id is required.')
+    param('id').notEmpty().withMessage('id is required.')
 
  ]
  export const addRentalAndTenantAgreementVal= [
