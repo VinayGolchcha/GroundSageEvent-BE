@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery} from "../model/profileQuery.js"
+import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery} from "../model/profileQuery.js"
 dotenv.config();
 
 
@@ -15,7 +15,7 @@ export const userRegistration = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const { username, email, password, role_id, team_id } = req.body;
+        const { username, email, password } = req.body;
         const [existingUser] = await userDetailQuery([email]);
         if (existingUser.length) {
             return errorResponse(res, '', 'User with this email already exists.');
@@ -25,11 +25,7 @@ export const userRegistration = async (req, res, next) => {
             username,
             email,
             password_hash,
-            role_id, 
-            team_id,
-            1,
-            new Date(),
-            new Date(),
+            1
         ]);
         return successResponse(res, "", 'User successfully registered');
     } catch (error) {
@@ -95,7 +91,7 @@ export const updateUserPassword = async (req, res, next) => {
         const { email, password, confirm_password } = req.body;
         let [user_data] = await userDetailQuery([email]);
         if (user_data.length == 0) {
-            return errorResponse(res, '', 'User not found');
+            return notFoundResponse(res, '', 'User not found');
         }
         if (password === confirm_password) {
             const password_hash = await bcrypt.hash(password.toString(), 12);
@@ -118,8 +114,8 @@ export const sendOtpForEmailVerification = async (req, res, next) => {
         }
         const { email } = req.body;
         const otp = Math.floor(1000 + Math.random() * 9000); // Generate a 4-digit OTP
-        const otpdata = await insertOtpQuery([otp, email])
-        if (otpdata[0].changedRows === 0) {
+        const otp_data = await insertOtpQuery([otp, email])
+        if (otp_data[0].changedRows === 0) {
             return errorResponse(res, '', 'Sorry, user not found. Please take a moment to register for an account.');
         } else {
             const data = await sendMail(email, `${otp} is the OTP for email verification!\n\n\n\nRegards,\nAmarya Business Consultancy`, 'Email Verification');
@@ -161,10 +157,64 @@ export const checkEmailVerification = async (req, res, next) => {
         }
         let [user_data] = await userDetailQuery([email]);
         if (user_data.length == 0) {
-            return errorResponse(res, '', 'User not found');
+            return notFoundResponse(res, '', 'User not found');
         }
         user_data = user_data[0];
         return successResponse(res, { is_email_verified: user_data.is_email_verified }, 'Email verification status.');
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getCurrentEventTeamAndRoleBasedOnUserId = async(req, res, next)=>{
+    try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {user_id} = req.body;
+        const [data] = await getUserCurrentTeamAndEventDataQuery([user_id]);
+        if (data.length == 0) {
+            return notFoundResponse(res, '', 'Data not found');
+        }
+        return successResponse(res,data, 'Data fetched successfully.')
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getAllEventsBasedOnUserId = async(req, res, next) => {
+    try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {user_id} = req.body;
+        const [data] = await getAllEventsForUserQuery([user_id]);
+        if (data.length == 0) {
+            return notFoundResponse(res, '', 'Data not found');
+        }
+        return successResponse(res, data, 'Data fetched successfully.')
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getUserEventAndTeamCount = async(req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {user_id} = req.body;
+        const [count] = await getUserEventAndTeamCountQuery([user_id, user_id])
+        const [members] = await getUserNameOfTeamMembersQuery([user_id])
+        if (count.length == 0) {
+            return notFoundResponse(res, '', 'Data not found');
+        }
+        return successResponse(res, {count, members:members}, 'Events and teams count fetched successfully.')
     } catch (error) {
         next(error);
     }

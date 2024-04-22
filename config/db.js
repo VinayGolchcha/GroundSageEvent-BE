@@ -5,13 +5,15 @@ dotenv.config();
 
 
 const createTables = async (connection, tables) => {
+    
 	// Execute the table creation queries
 	await Promise.all(
 		tables.map(async (tableQuery) => {
-			const res = await connection.query(tableQuery);
-            console.log(res);
+			await connection.query(tableQuery);
 		})
 	);
+
+
 };
 export let rootConnection = mysql
 .createConnection({
@@ -20,7 +22,7 @@ export let rootConnection = mysql
     password: process.env.MYSQL_PASSWORD,
     connectTimeout: 20000,
 })
-.promise();
+ .promise();
 // console.log(rootConnection);
 let pool;
 pool = mysql.createPool({

@@ -2,7 +2,7 @@ import pool from "../../../config/db.js"
 
 export const addTeamQuery = (array) => {
     try {
-        let query = `INSERT INTO teams (team_name, team_size) VALUES (?,?,?)`
+        let query = `INSERT INTO teams (team_name, team_size, event_id) VALUES (?,?,?)`
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing addTeamQuery:", error);
@@ -38,15 +38,6 @@ export const getLastTeamIdQuery = () =>{
     }
 }
 
-export const updatedTeamQuery = (array) =>{
-    try {
-        let query = `UPDATE teams SET team_name = ?, team_size = ? WHERE team_id = ?`
-        return pool.query(query, array);
-    } catch (error) {
-        console.error("Error executing updatedTeamQuery:", error);
-        throw error;
-    }
-}
 
 export const deleteTeamQuery = async (teamId) => {
     try {
@@ -66,3 +57,40 @@ export const updateTeamQuery = (query, array) => {
         throw error;
     }
 }
+
+export const fetchUserTeamQuery = (array) =>{
+    try{
+        let query = `SELECT  profiles.username, profiles.team_id,teams.team_name,teams.event_id
+        FROM profiles 
+        INNER JOIN teams ON profiles.team_id = teams.id
+        
+        WHERE  teams.event_id = ? `;
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing fetchUserTeamQuery:",error);
+        throw error;
+    }
+
+    }
+
+export const getUserEventTeamQuery = (array) =>{
+    try{
+        let query = `SELECT
+        COUNT(DISTINCT teams.id) AS team_count,
+        COUNT(DISTINCT events.id) AS event_count
+    FROM
+        profiles
+    INNER JOIN
+        teams ON profiles.team_id = teams.id
+    INNER JOIN
+        events ON teams.event_id = events.id
+    WHERE
+        events.user_id = ?`;
+        return pool.query(query ,array);
+    }catch (error){
+        console.error("Error executing getUserEventTeamQuery : ",error);
+        throw(error);
+    }
+}
+
+    

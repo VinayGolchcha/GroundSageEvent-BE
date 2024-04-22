@@ -1,3 +1,4 @@
+
 const eventTable = `
 CREATE TABLE IF NOT EXISTS events (
     id int NOT NULL AUTO_INCREMENT,
@@ -11,4 +12,4 @@ CREATE TABLE IF NOT EXISTS events (
 ) AUTO_INCREMENT = 1111`;
 
 export default eventTable;
-// user_id as array
+
