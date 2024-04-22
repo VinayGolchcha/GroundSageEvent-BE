@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery} from "../model/profileQuery.js"
+import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery} from "../model/profileQuery.js"
 dotenv.config();
 
 
@@ -197,6 +197,24 @@ export const getAllEventsBasedOnUserId = async(req, res, next) => {
             return notFoundResponse(res, '', 'Data not found');
         }
         return successResponse(res, data, 'Data fetched successfully.')
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getUserEventAndTeamCount = async(req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {user_id} = req.body;
+        const [count] = await getUserEventAndTeamCountQuery([user_id, user_id])
+        const [members] = await getUserNameOfTeamMembersQuery([user_id])
+        if (count.length == 0) {
+            return notFoundResponse(res, '', 'Data not found');
+        }
+        return successResponse(res, {count, members:members}, 'Events and teams count fetched successfully.')
     } catch (error) {
         next(error);
     }

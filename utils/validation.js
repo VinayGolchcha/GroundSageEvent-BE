@@ -208,6 +208,9 @@ export const deleteRolesVal = [
     body('notes_description').optional().isString().withMessage('Invalid note description input.').notEmpty().withMessage(' note description cannot be empty.')
  ]
 
+ export const getCurrentEventTeamUserIdVal = [
+    body('user_id').notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input.")
+ ]
 
  
 

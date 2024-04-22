@@ -11,4 +11,4 @@ import rentalAgreementTable from "../v1/rentalAgreement/model/rentalAgreementMod
 import tenantTable from "../v1/tenant/model/tenantModel.js";
 import noteTable from "../v1/notes/model/noteModel.js";
 
-export default [ eventTable,teamTable, roleTable, profileTable,shopTable, shopImagesTable, transactionTable,tenantTable,rentalAgreementTable, userEventTable, userTeamTable, noteTable];
+export default [ profileTable,eventTable,teamTable, roleTable,shopTable, shopImagesTable, transactionTable,tenantTable,rentalAgreementTable, userEventTable, userTeamTable, noteTable];
