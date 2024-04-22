@@ -63,6 +63,9 @@ export const createEventVal = [
     body('event_description').isString().withMessage('Invalid event_description input.').notEmpty().withMessage('Event description cannot be empty.'),
     body('start_date').notEmpty().withMessage('start_date cannot be empty.').isDate().withMessage("start_date must be a date."), 
     body('end_date').notEmpty().withMessage('end_date cannot be empty.').isDate().withMessage("end_date must be a date."), 
+    body('coordinator_count').optional().isInt().withMessage('Invalid coordinator_count input.').notEmpty().withMessage('Coordinator count cannot be empty.'), 
+    body('staff_members_count').optional().isInt().withMessage('Invalid staff_members_count input.').notEmpty().withMessage('Staff Members count cannot be empty.'), 
+    body('helpers_count').optional().isInt().withMessage('Invalid helpers_count input.').notEmpty().withMessage('Helper count cannot be empty.'), 
 ];
 
 export const updateEventVal = [
@@ -72,6 +75,12 @@ export const updateEventVal = [
     body('start_date').optional().notEmpty().withMessage('start_date cannot be empty.').isDate().withMessage("start_date must be a date."), 
     body('end_date').optional().notEmpty().withMessage('end_date cannot be empty.').isDate().withMessage("end_date must be a date."), 
 ];
+
+export const joinEventTeamVal = [
+    body('user_id').notEmpty().withMessage('user_id cannot be empty.').isInt().withMessage("Invalid user_id input."),
+    body('referral_code').isString().withMessage('Invalid referral_code input.').notEmpty().withMessage('Referral code cannot be empty.'),
+];
+
 export const deleteEventVal = [
     param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
 ];

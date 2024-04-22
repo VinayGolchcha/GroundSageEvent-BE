@@ -37,3 +37,13 @@ export const createDynamicUpdateQuery = async(table, condition, req_data)=>{
     });
     return {updateQuery, updateValues};
 }
+
+export const generateReferralCode = (length)=> {
+    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let code = '';
+    for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      code += charset[randomIndex];
+    }
+    return code;
+}
