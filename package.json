@@ -4,7 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "node app.js"
+    "start": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,7 +17,8 @@
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.9.1",
     "nodemailer": "^6.9.11",
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "pg": "^8.11.5"
   },
   "main": "app.js",
   "keywords": []
