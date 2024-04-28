@@ -46,3 +46,45 @@ export const updateTransactionQuery = (query, array) => {
         throw error;
     }
 }
+
+export const fetchOutstandingBalanceForIncomeAndExpenseQuery = (event_id, tag, flag) => {
+    try {
+        let query;
+        if (flag == "year") {
+            query = `SELECT YEAR(created_at) AS year,
+            type,
+            event_id,
+            SUM(outstanding_amount) AS total_outstanding_amount,
+            SUM(decided_amount) AS total,
+            SUM(entered_amount) AS total_received_amount
+     FROM transactions
+     WHERE event_id = ?
+       AND (
+           (tag = ? AND (type = 'shop rental' OR type = 'others'))
+           OR
+           (tag = ? AND (type = 'staff salary' OR type = 'others'))
+       )
+     GROUP BY YEAR(created_at), type;`;
+        }
+        if (flag == "month") {
+            query = `SELECT MONTH(created_at) AS month,
+            type,
+            event_id,
+            SUM(outstanding_amount) AS total_outstanding_amount,
+            SUM(decided_amount) AS total,
+            SUM(entered_amount) AS total_received_amount
+     FROM transactions
+     WHERE event_id = ?
+       AND (
+           (tag = ? AND (type = 'shop rental' OR type = 'others'))
+           OR
+           (tag = ? AND (type = 'staff salary' OR type = 'others'))
+       )
+     GROUP BY MONTH(created_at), type;`;
+        }
+        return pool.query(query, [event_id, tag, tag]);
+    } catch (error) {
+        console.error("Error executing fetchOutstandingBalanceForIncomeAndExpenseQuery:", error);
+        throw error;
+    }
+}

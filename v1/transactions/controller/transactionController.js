@@ -1,7 +1,7 @@
 import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery} from "../model/transactionQuery.js"
+import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery, fetchOutstandingBalanceForIncomeAndExpenseQuery} from "../model/transactionQuery.js"
 import {incrementId, createDynamicUpdateQuery} from "../../helpers/functions.js"
 dotenv.config();
 
@@ -92,3 +92,20 @@ export const deleteTransaction = async (req, res, next) => {
         next(error);
     }
 }
+
+export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "");
+        }
+        const { flag, type, event_id } = req.body;
+        const [data] = await fetchOutstandingBalanceForIncomeAndExpenseQuery(event_id, type, flag)
+        if (data.length == 0) {
+            return errorResponse(res, '', 'Data not found.');
+        }
+        return successResponse(res, data, `${flag + "ly"} ${type} fetched successfully.`);
+    } catch (error) {
+        next(error);
+    }
+};
