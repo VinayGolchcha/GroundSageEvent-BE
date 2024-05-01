@@ -23,8 +23,8 @@ export const fetchTeam = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { team_id } = req.body;
-    const [data] = await fetchTeamQuery([team_id]);
+    const { id } = req.body;
+    const [data] = await fetchTeamQuery([id]);
     if (data.length == 0) {
       return errorResponse(res, "", "Data not found.");
     }
@@ -58,23 +58,23 @@ export const updateTeam = async (req, res, next) => {
 }
 
 
-export const deleteTeam = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "")
-    }
-    const { team_id } = req.body;
-    const [data] = await fetchTeamQuery([team_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    await deleteTeamQuery([team_id]);
-    return successResponse(res, "", 'Team deleted successfully');
-  } catch (error) {
-    next(error);
-  }
-}
+// export const deleteTeam = async (req, res, next) => {
+//   try {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return errorResponse(res, errors.array(), "")
+//     }
+//     const { id } = req.body;
+//     const [data] = await fetchTeamQuery([id]);
+//     if (data.length == 0) {
+//       return errorResponse(res, '', 'Data not found.');
+//     }
+//     await deleteTeamQuery([id]);
+//     return successResponse(res, "", 'Team deleted successfully');
+//   } catch (error) {
+//     next(error);
+//   }
+// }
 
 export const getUserEventTeamCount = async (req, res, next) => {
   try {

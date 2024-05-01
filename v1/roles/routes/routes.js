@@ -9,7 +9,7 @@ router.use(authenticateToken);
 app.post('/add-role',addRolesVal, addRole);
 app.put('/update-role/:id',updateRolesVal,updateRole);
 app.delete('/delete-role/:id',deleteRolesVal, deleteRole);
-app.get('/fetch-role', fetchRole);
+app.get('/fetch-role/:id', fetchRole);
 app.get('/fetch-all-roles', fetchAllRoles);
 
 app.use("/", router);

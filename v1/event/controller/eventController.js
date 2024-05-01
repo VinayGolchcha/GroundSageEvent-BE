@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery, generateReferralCode} from '../../helpers/functions.js'
-import {createEventQuery, deleteEventQuery, getAllEventsQuery, getEventQuery, getLastEventIdQuery, getLastTeamIdQuery, getRoleIdQuery, insertUserEventQuery, insertUserTeamQuery, updateEventQuery} from '../model/eventQuery.js'
+import {createEventQuery, getAllEventsQuery, getEventQuery, getLastEventIdQuery, getLastTeamIdQuery, getRoleIdQuery, insertUserEventQuery, insertUserTeamQuery, updateEventQuery} from '../model/eventQuery.js'
 import { addTeamQuery } from "../../team/model/teamQuery.js"
 import { addReferralCodeQuery, checkReferralCode, inactiveReferralCodeQuery, fetchUserDetailsByUserIdQuery,fetchEventDetailsByUserIdQuery } from "../model/referralCodesQuery.js"
 dotenv.config();
@@ -76,19 +76,19 @@ export const getAllEvents = async (req, res, next) => {
     }
 }
 
-export const deleteEvent = async (req, res, next) => {
-    try {
-        const event_id = req.params.id;
-        const [data] = await getEventQuery([event_id]);
-        if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
-        }
-        await deleteEventQuery([event_id]);
-        return successResponse(res, 'Event deleted successfully.');
-    } catch (error) {
-        next(error);
-    }
-}
+// export const deleteEvent = async (req, res, next) => {
+//     try {
+//         const event_id = req.params.id;
+//         const [data] = await getEventQuery([event_id]);
+//         if (data.length==0) {
+//             return errorResponse(res, '', 'Data not found.');
+//         }
+//         await deleteEventQuery([event_id]);
+//         return successResponse(res, 'Event deleted successfully.');
+//     } catch (error) {
+//         next(error);
+//     }
+// }
 
 export const joinUserTeamWithReferralCode = async(req, res, next) => {
     try {

@@ -49,11 +49,6 @@ export const updateTeamVal = [
     body('team_size').optional().isInt().withMessage('Invalid team size input.').notEmpty().withMessage('team size cannot be empty.')
 ]
 
-export const deleteTeamVal = [
-    body('team_id').isInt().withMessage('Invalid team_name input.').notEmpty().withMessage('Team name cannot be empty.')
-]
-
-
 export const fetchTeamVal = [
     body('id').isInt().withMessage('Invalid team_name input.').notEmpty().withMessage('Team name cannot be empty.')
 ]
@@ -80,11 +75,6 @@ export const joinEventTeamVal = [
     body('user_id').notEmpty().withMessage('user_id cannot be empty.').isInt().withMessage("Invalid user_id input."),
     body('referral_code').isString().withMessage('Invalid referral_code input.').notEmpty().withMessage('Referral code cannot be empty.'),
 ];
-
-export const deleteEventVal = [
-    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
-];
-
 
 export const addShopVal = [
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
