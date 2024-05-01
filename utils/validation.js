@@ -221,6 +221,13 @@ export const deleteRolesVal = [
     body('user_id').notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input.")
  ]
 
- 
+export const getShopOccupancyDetailsVal = [
+    body('flag').notEmpty().withMessage('flag cannot be empty.').isString().withMessage("Invalid flag input."),
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+]
 
- 
+export const fetchOutstandingBalanceForIncomeAndExpenseVal = [
+    body('flag').notEmpty().withMessage('flag cannot be empty.').isString().withMessage("Invalid flag input."),
+    body('type').notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
+]
