@@ -104,7 +104,7 @@ export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next)
         if (data.length == 0) {
             return errorResponse(res, '', 'Data not found.');
         }
-        return successResponse(res, data, `${flag + "ly"} ${type} fetched successfully.`);
+        return successResponse(res, data, `${flag + "ly"} ${type} outstanding fetched successfully.`);
     } catch (error) {
         next(error);
     }
