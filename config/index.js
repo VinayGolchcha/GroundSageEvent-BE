@@ -10,5 +10,6 @@ import transactionTable from "../v1/transactions/model/transactionModel.js";
 import rentalAgreementTable from "../v1/rentalAgreement/model/rentalAgreementModel.js";
 import tenantTable from "../v1/tenant/model/tenantModel.js";
 import noteTable from "../v1/notes/model/noteModel.js";
+import referralCodesTable from "../v1/event/model/referralModel.js";
 
-export default [ eventTable,teamTable, roleTable, profileTable,shopTable, shopImagesTable, transactionTable,tenantTable,rentalAgreementTable, userEventTable, userTeamTable, noteTable];
+export default [ profileTable,eventTable,teamTable, roleTable,shopTable, shopImagesTable, transactionTable,tenantTable,rentalAgreementTable, userEventTable, userTeamTable, noteTable, referralCodesTable];

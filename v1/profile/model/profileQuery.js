@@ -112,3 +112,37 @@ export const getAllEventsForUserQuery = (array) => {
         throw error;
     }
 }
+
+export const getUserEventAndTeamCountQuery = async(array)=>{
+    try {
+        let query = `SELECT
+        (SELECT COUNT(DISTINCT event_id) FROM userEvents WHERE user_id = ?) AS event_count,
+        (SELECT COUNT(DISTINCT team_id) FROM userTeams WHERE user_id = ?) AS team_count;`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing getUserEventAndTeamCountQuery:", error);
+        throw error
+    }
+}
+
+export const getUserNameOfTeamMembersQuery = async (array) => {
+    try {
+        let query = `SELECT
+        p.username,
+        e.event_name,
+        t.team_name
+    FROM profiles p
+    JOIN userTeams ut ON p.id = ut.user_id
+    JOIN teams t ON ut.team_id = t.id
+    JOIN events e ON t.event_id = e.id
+    WHERE ut.team_id IN (
+        SELECT team_id
+        FROM userTeams
+        WHERE user_id = ?
+    );`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing getUserNameOfTeamMembersQuery:", error);
+        throw error
+    }
+}

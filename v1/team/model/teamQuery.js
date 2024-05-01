@@ -73,26 +73,24 @@ export const fetchUserTeamQuery = (array) =>{
 
     }
 
-    export const getUserEventTeamQuery = (array) =>{
-        try{
-            let query = `SELECT
-            COUNT(DISTINCT teams.id) AS team_count,
-            COUNT(DISTINCT events.id) AS event_count
-        FROM
-            profiles
-        INNER JOIN
-            teams ON profiles.team_id = teams.id
-        INNER JOIN
-            events ON teams.event_id = events.id
-        WHERE
-            events.user_id = ?`;
-        
-            return pool.query(query ,array);
-
-        }catch (error){
-            console.error("Error executing getUserEventTeamQuery : ",error);
-            throw(error);
-        }
+export const getUserEventTeamQuery = (array) =>{
+    try{
+        let query = `SELECT
+        COUNT(DISTINCT teams.id) AS team_count,
+        COUNT(DISTINCT events.id) AS event_count
+    FROM
+        profiles
+    INNER JOIN
+        teams ON profiles.team_id = teams.id
+    INNER JOIN
+        events ON teams.event_id = events.id
+    WHERE
+        events.user_id = ?`;
+        return pool.query(query ,array);
+    }catch (error){
+        console.error("Error executing getUserEventTeamQuery : ",error);
+        throw(error);
     }
+}
 
     

@@ -1,7 +1,7 @@
 import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery,fetchYearlyDataQuery,fetchAllYearsDataQuery} from "../model/transactionQuery.js"
+import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery, fetchOutstandingBalanceForIncomeAndExpenseQuery,fetchYearlyDataQuery,fetchAllYearsDataQuery} from "../model/transactionQuery.js"
 import {incrementId, createDynamicUpdateQuery} from "../../helpers/functions.js"
 dotenv.config();
 
@@ -88,40 +88,6 @@ export const deleteTransaction = async (req, res, next) => {
         }
         await deleteTransactionQuery([transaction_id, event_id]);
         return successResponse(res, "", 'Transaction deleted successfully');
-    } catch (error) {
-        next(error);
-    }
-}
-
-export const fetchYearlyData = async (req, res, next) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return errorResponse(res, errors.array(), "")
-        }
-        const {year,type} = req.body;
-        const [data] = await fetchYearlyDataQuery([year, type]);
-        if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
-        }
-        return successResponse(res, data, 'Yearly  data fetched successfully');
-    } catch (error) {
-        next(error);
-    }
-}
-
-export const fetchAllYearsData = async (req, res, next) => {
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return errorResponse(res, errors.array(), "")
-        }
-        const {year,type} = req.body;
-        const [data] = await fetchAllYearsDataQuery([year, type]);
-        if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
-        }
-        return successResponse(res, data, 'All years  data fetched successfully');
     } catch (error) {
         next(error);
     }
