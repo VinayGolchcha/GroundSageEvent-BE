@@ -87,6 +87,11 @@ export const getShopById = async(req, res, next) =>{
 
 export const getShopOccupancyDetails = async(req, res, next) => {
     try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
         const {flag, event_id} = req.body; //flag can be shop or month
         const [data] = await getShopOccupancyDetailsQuery(flag, [event_id, event_id]);
         if(data.length==0){
