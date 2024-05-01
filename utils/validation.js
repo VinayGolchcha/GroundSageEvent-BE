@@ -162,17 +162,17 @@ export const deleteRolesVal = [
 
  ]
  export const addRentalAndTenantAgreementVal= [
-    body('shop_id').isInt().withMessage('Invalid shop_id input.').notEmpty().withMessage(' shop id cannot be empty.'),
-    body('tenant_id').isInt().withMessage('Invalid tenant_id input.').notEmpty().withMessage(' tenant id cannot be empty.'),
-    body('rent_amount').isInt().withMessage('Invalid rent amount input.').notEmpty().withMessage(' rent amount cannot be empty.'),
-    body('id_document').isURL().withMessage('Invalid id document input.').notEmpty().withMessage(' id document cannot be empty.'),
-    body('start_date').isDate().withMessage('Invalid start date input.').notEmpty().withMessage(' shop id cannot be empty.'),
-    body('end_date').isDate().withMessage('Invalid end date input.').notEmpty().withMessage(' start date cannot be empty.'),
-    body('rent_mode').isIn(['day','week','month']).withMessage('Invalid rent mode input.').notEmpty().withMessage(' rent mode cannot be empty.'),
-    body('phone_number').isLength({ min: 10, max: 15 }).withMessage('Invalid phone number input.').notEmpty().withMessage(' phone number cannot be empty.'),
-    body('name').isString().withMessage('Invalid name input.').notEmpty().withMessage(' name cannot be empty.'),
-    body('email').isEmail().withMessage('Invalid email input.').notEmpty().withMessage(' email cannot be empty.'),
-    body('address').isString().withMessage('Invalid address input.').notEmpty().withMessage(' address cannot be empty.')
+//     body('shop_id').isInt().withMessage('Invalid shop_id input.').notEmpty().withMessage(' shop id cannot be empty.'),
+//     // body('tenant_id').isInt().withMessage('Invalid tenant_id input.').notEmpty().withMessage(' tenant id cannot be empty.'),
+//     body('rent_amount').isInt().withMessage('Invalid rent amount input.').notEmpty().withMessage(' rent amount cannot be empty.'),
+//     body('id_document').isURL().withMessage('Invalid id document input.').notEmpty().withMessage(' id document cannot be empty.'),
+//     body('start_date').isDate().withMessage('Invalid start date input.').notEmpty().withMessage(' shop id cannot be empty.'),
+//     body('end_date').isDate().withMessage('Invalid end date input.').notEmpty().withMessage(' start date cannot be empty.'),
+//     body('rent_mode').isIn(['day','week','month']).withMessage('Invalid rent mode input.').notEmpty().withMessage(' rent mode cannot be empty.'),
+//     body('phone_number').isLength({ min: 10, max: 15 }).withMessage('Invalid phone number input.').notEmpty().withMessage(' phone number cannot be empty.'),
+//     body('name').isString().withMessage('Invalid name input.').notEmpty().withMessage(' name cannot be empty.'),
+//     body('email').isEmail().withMessage('Invalid email input.').notEmpty().withMessage(' email cannot be empty.'),
+   body('address').isString().withMessage('Invalid address input.').notEmpty().withMessage(' address cannot be empty.')
  ]
 
  export const fetchRentalAgreementVal =[
@@ -181,7 +181,7 @@ export const deleteRolesVal = [
  ]
     
  export const editRentalAgreementVal =[
-    param('shop_id').isInt().withMessage('Invalid shop id input.').notEmpty().withMessage(' shop id cannot be empty.'),
+    param('shopid').isInt().withMessage('Invalid shop id input.').notEmpty().withMessage(' shop id cannot be empty.'),
     param('id').isInt().withMessage('Invalid  id input.').notEmpty().withMessage('  id cannot be empty.'),
     body('start_date').optional().isDate().withMessage('Invalid date input.').notEmpty().withMessage(' date cannot be empty.'),
     body('end_date').optional().isDate().withMessage('Invalid date input.').notEmpty().withMessage(' date cannot be empty.'),

@@ -60,7 +60,6 @@ export const updateTeamQuery = (query, array) => {
 
 export const fetchUserTeamQuery = (array) =>{
     try{
-        console.log("aaaaaaaaaaaaa",array)
         let query = `SELECT  profiles.username, profiles.team_id,teams.team_name,teams.event_id
         FROM profiles 
         INNER JOIN teams ON profiles.team_id = teams.id

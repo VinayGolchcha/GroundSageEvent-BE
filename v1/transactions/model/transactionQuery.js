@@ -46,3 +46,63 @@ export const updateTransactionQuery = (query, array) => {
         throw error;
     }
 }
+
+export const fetchYearlyDataQuery = async(array) => {
+    try{
+        let query =`SELECT 
+        YEAR(created_at) AS year,
+        tag AS type,
+        SUM(CASE WHEN type= 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
+        SUM(CASE WHEN type = 'shop rental' THEN (decided_amount + outstanding_amount) ELSE 0 END) AS others_total,
+        SUM(entered_amount + decided_amount + outstanding_amount) AS total
+    FROM 
+        transactions
+    WHERE 
+        year(created_at) = ? AND type = ?
+    GROUP BY 
+        YEAR(created_at),
+        TYPE IN ('income','expense');`
+    return await pool.query(query, array);
+} catch (error) {
+    console.error("Error executing fetchYearlyDataQuery:", error);
+    throw error;
+}
+}
+
+export const fetchAllYearsDataQuery = async(array) => {
+    try{
+        let query =`  SELECT
+        YEAR(created_at) AS year,
+        MONTH(created_at) AS month,
+        TYPE(tag) AS type,
+        SUM(CASE WHEN tag = 'Income' THEN entered_amount ELSE 0 END) AS shop rental total,
+        SUM(CASE WHEN tag = 'Income' THEN (deciding_amount + outstanding_amount)ELSE 0 END) AS others total,
+        SUM(entered_amount +deciding_amount  + outstanding_amount) AS  total,
+        SUM(CASE WHEN tag = 'Expense' THEN entered_amount ELSE 0 END) AS staff salary total,
+        SUM(CASE WHEN tag = 'Expense' THEN (decided_amount + outstanding_amount) ELSE 0 END) AS others total,
+        SUM(entered_amount + deciding_amount  + outstanding_amount) AS total
+    FROM
+        transactions
+    WHERE
+        event_id = 1112
+        AND YEAR(created_at) <=?
+        OR
+        AND MONTH(created_at) =?
+        AND type = ?
+    GROUP BY
+        YEAR(created_at),
+        MONTH(created_at),
+        TYPE IN ('income','expense')
+    ORDER BY
+        YEAR(created_at),
+        MONTH(created_at),
+        TYPE IN ('income','expense');`
+    return await pool.query(query, array);
+} catch (error) {
+    console.error("Error executing fetchAllYearsDataQuery:", error);
+    throw error;
+}
+}
+
+
+
