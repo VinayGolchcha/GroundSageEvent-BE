@@ -9,7 +9,7 @@ import eventRoutes from './v1/event/routes/routes.js'
 import roleRoutes from './v1/roles/routes/routes.js'
 import shopRoutes from './v1/shop/routes/routes.js'
 import transactionRoutes from './v1/transactions/routes/routes.js'
-import rentalAgreementRoutes from './v1/rental agreement/routes/routes.js';
+import rentalAgreementRoutes from './v1/rentalAgreement/routes/routes.js';
 import noteRoutes from './v1/notes/routes/routes.js';
 import tenantRoutes from './v1/tenant/routes/routes.js'
 
@@ -29,6 +29,7 @@ app.use('/api/v1/transaction', transactionRoutes);
 app.use('/api/v1/rentalAgreement', rentalAgreementRoutes);
 app.use('/api/v1/tenant',tenantRoutes);
 app.use('/api/v1/note',noteRoutes);
+app.use('/api/v1/rentalagreement',rentalAgreementRoutes);
 
 
 app.use('/', (req, res) => {

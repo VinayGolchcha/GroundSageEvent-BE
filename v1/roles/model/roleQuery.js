@@ -20,7 +20,6 @@ export const fetchAllRolesQuery = async() => {
 };
 export const fetchRoleQuery = (array) => {
   try {
-    console.log("_id", array);
     let query = `SELECT *  FROM roles WHERE _id = ?`;
     return pool.query(query, array);
   } catch (error) {

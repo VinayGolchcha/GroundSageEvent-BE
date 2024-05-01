@@ -2,7 +2,7 @@ import pool from "../../../config/db.js"
 
 export const addTeamQuery = (array) => {
     try {
-        let query = `INSERT INTO teams (team_name, team_size,event_id) VALUES (?,?,?)`
+        let query = `INSERT INTO teams (team_name, team_size, event_id) VALUES (?,?,?)`
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing addTeamQuery:", error);
