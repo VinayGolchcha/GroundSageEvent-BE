@@ -10,6 +10,16 @@ export const createShopQuery=(array) =>{
     }
 }
 
+export const checkShopNumberQuery = (shopNumber) => {
+    try {
+        let query = `SELECT COUNT(*) AS count FROM shops WHERE shop_number = ?`;
+        return pool.query(query, [shopNumber]);
+    } catch (error) {
+        console.error("Error executing checkShopNumberQuery:", error);
+        throw error;
+    }
+}
+
 export const updateShopQuery = (query, array)=> {
     try {
         return pool.query(query, array);

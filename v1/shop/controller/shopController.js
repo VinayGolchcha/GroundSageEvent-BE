@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery} from '../../helpers/functions.js'
-import {createShopQuery, deleteShopQuery, getAllShopsQuery, getShopOccupancyDetailsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
+import {checkShopNumberQuery, createShopQuery, deleteShopQuery, getAllShopsQuery, getShopOccupancyDetailsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
 dotenv.config();
 
 export const createShop = async (req, res, next) => {
@@ -13,8 +13,12 @@ export const createShop = async (req, res, next) => {
             return errorResponse(res, errors.array(), "")
         }
         const {event_id, shop_number, description, area, rent, location, status} = req.body;
-        await createShopQuery([event_id, shop_number, description, area, rent, location, status])
-        return successResponse(res, 'Shop created successfully.');
+        const [isExists] = await checkShopNumberQuery(shop_number);
+        if (isExists[0].count > 0) {
+            return notFoundResponse(res, "", `Shop number ${shop_number} already exists, please choose different shop number.`);
+        }
+        const [data] = await createShopQuery([event_id, shop_number, description, area, rent, location, status])
+        return successResponse(res, {shop_id: data.insertId} ,'Shop created successfully.');
     } catch (error) {
         next(error);
     }
