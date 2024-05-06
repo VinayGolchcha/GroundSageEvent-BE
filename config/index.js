@@ -8,7 +8,7 @@ import shopTable from "../v1/shop/model/shopModel.js";
 import shopImagesTable from "../v1/shop/model/shopImagesModel.js";
 import transactionTable from "../v1/transactions/model/transactionModel.js";
 import rentalAgreementTable from "../v1/rentalAgreement/model/rentalAgreementModel.js";
-import tenantTable from "../v1/tenant/model/tenantModel.js";
+import tenantTable from "../v1/rentalAgreement/model/tenantModel.js";
 import noteTable from "../v1/notes/model/noteModel.js";
 import referralCodesTable from "../v1/event/model/referralModel.js";
 

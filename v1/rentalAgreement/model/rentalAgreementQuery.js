@@ -43,3 +43,4 @@ export const deleteRentalAgreementQuery = async (_id) => {
     throw error;
   }
 };
+

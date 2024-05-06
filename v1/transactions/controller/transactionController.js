@@ -1,7 +1,7 @@
 import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery, fetchOutstandingBalanceForIncomeAndExpenseQuery,fetchYearlyDataQuery,fetchAllYearsDataQuery} from "../model/transactionQuery.js"
+import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery, fetchOutstandingBalanceForIncomeAndExpenseQuery,fetchYearlyDataQuery,fetchAllYearsDataQuery,fetchTenantsReportDataQuery} from "../model/transactionQuery.js"
 import {incrementId, createDynamicUpdateQuery} from "../../helpers/functions.js"
 dotenv.config();
 
@@ -92,3 +92,72 @@ export const deleteTransaction = async (req, res, next) => {
         next(error);
     }
 }
+
+export const fetchYearlyData = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {year,type, event_id} = req.body;
+        const [data] = await fetchYearlyDataQuery([year,type, event_id]);
+        if (data.length==0) {
+            return errorResponse(res, '', 'Data not found.');
+        }
+        return successResponse(res, data, 'Yearly data fetched successfully');
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const fetchAllYearsData = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {flag,type,event_id} = req.body;
+        const [data] = await fetchAllYearsDataQuery([flag,type, event_id]);
+        if (data.length==0) {
+            return errorResponse(res, '', 'Data not found.');
+        }
+        return successResponse(res, data, 'fetch all years data successfull');
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {flag,type,event_id} = req.body;
+        const [data] = await fetchOutstandingBalanceForIncomeAndExpenseQuery([flag,type, event_id]);
+        if (data.length==0) {
+            return errorResponse(res, '', 'Data not found.');
+        }
+        return successResponse(res, data, 'fetch outstanding balance for income and expencedata successfull');
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const fetchTenantsReportData= async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return errorResponse(res, errors.array(), "");
+      }
+      const { event_id,from_date,to_date} = req.body;
+       const [data] = await fetchTenantsReportDataQuery([event_id,from_date,to_date]);
+      if (data.length == 0) {
+        return errorResponse(res, "", "Data not found.");
+      }
+      return await successResponse(res, data, "Tenants data fetched successfully");
+    } catch (error) {
+      next(error);
+    }
+  };
+

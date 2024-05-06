@@ -1,7 +1,7 @@
 {
   "name": "dental_backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "An insightful canvas app for easing the counselling of the doctors.",
   "type": "module",
   "scripts": {
     "start": "node app.js"
@@ -20,5 +20,6 @@
     "nodemon": "^3.0.3"
   },
   "main": "app.js",
-  "keywords": []
+  "keywords": [],
+  "devDependencies": {}
 }
