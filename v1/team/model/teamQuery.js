@@ -11,7 +11,7 @@ export const addTeamQuery = (array) => {
 }
 export const fetchAllTeamsQuery = () => {
     try {
-        let query = `SELECT team_id, team_name, team_size FROM teams`
+        let query = `SELECT id, team_name, team_size FROM teams`
         return pool.query(query);
     } catch (error) {
         console.error("Error executing fetchAllTeamQuery:", error);

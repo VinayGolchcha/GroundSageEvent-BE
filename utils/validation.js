@@ -49,11 +49,6 @@ export const updateTeamVal = [
     body('team_size').optional().isInt().withMessage('Invalid team size input.').notEmpty().withMessage('team size cannot be empty.')
 ]
 
-export const deleteTeamVal = [
-    body('team_id').isInt().withMessage('Invalid team_name input.').notEmpty().withMessage('Team name cannot be empty.')
-]
-
-
 export const fetchTeamVal = [
     body('id').isInt().withMessage('Invalid team_name input.').notEmpty().withMessage('Team name cannot be empty.')
 ]
@@ -63,6 +58,9 @@ export const createEventVal = [
     body('event_description').isString().withMessage('Invalid event_description input.').notEmpty().withMessage('Event description cannot be empty.'),
     body('start_date').notEmpty().withMessage('start_date cannot be empty.').isDate().withMessage("start_date must be a date."), 
     body('end_date').notEmpty().withMessage('end_date cannot be empty.').isDate().withMessage("end_date must be a date."), 
+    body('coordinator_count').optional().isInt().withMessage('Invalid coordinator_count input.').notEmpty().withMessage('Coordinator count cannot be empty.'), 
+    body('staff_members_count').optional().isInt().withMessage('Invalid staff_members_count input.').notEmpty().withMessage('Staff Members count cannot be empty.'), 
+    body('helpers_count').optional().isInt().withMessage('Invalid helpers_count input.').notEmpty().withMessage('Helper count cannot be empty.'), 
 ];
 
 export const updateEventVal = [
@@ -72,10 +70,11 @@ export const updateEventVal = [
     body('start_date').optional().notEmpty().withMessage('start_date cannot be empty.').isDate().withMessage("start_date must be a date."), 
     body('end_date').optional().notEmpty().withMessage('end_date cannot be empty.').isDate().withMessage("end_date must be a date."), 
 ];
-export const deleteEventVal = [
-    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
-];
 
+export const joinEventTeamVal = [
+    body('user_id').notEmpty().withMessage('user_id cannot be empty.').isInt().withMessage("Invalid user_id input."),
+    body('referral_code').isString().withMessage('Invalid referral_code input.').notEmpty().withMessage('Referral code cannot be empty.'),
+];
 
 export const addShopVal = [
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
@@ -83,6 +82,7 @@ export const addShopVal = [
     body('description').notEmpty().withMessage('description cannot be empty.').isString().withMessage("Invalid description input."),
     body('area').notEmpty().withMessage('area cannot be empty.').isInt().withMessage("Invalid area input."),
     body('rent').notEmpty().withMessage('rent cannot be empty.').isInt().withMessage("Invalid rent input."),
+    body('dome').notEmpty().withMessage('dome cannot be empty.').isString().withMessage("Invalid dome input."),
     body('location').notEmpty().withMessage('location cannot be empty.').isString().withMessage("Invalid location input."),
     body('status').notEmpty().withMessage('status cannot be empty.').isString().withMessage("Invalid status input."),
 ]
@@ -212,6 +212,13 @@ export const deleteRolesVal = [
     body('user_id').notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input.")
  ]
 
- 
+export const getShopOccupancyDetailsVal = [
+    body('flag').notEmpty().withMessage('flag cannot be empty.').isString().withMessage("Invalid flag input."),
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+]
 
- 
+export const fetchOutstandingBalanceForIncomeAndExpenseVal = [
+    body('flag').notEmpty().withMessage('flag cannot be empty.').isString().withMessage("Invalid flag input."),
+    body('type').notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
+]

@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery} from '../../helpers/functions.js'
-import {createShopQuery, deleteShopQuery, getAllShopsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
+import {checkShopNumberQuery, createShopQuery, deleteShopQuery, getAllShopsQuery, getShopOccupancyDetailsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
 dotenv.config();
 
 export const createShop = async (req, res, next) => {
@@ -12,9 +12,13 @@ export const createShop = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const {event_id, shop_number, description, area, rent, location, status} = req.body;
-        await createShopQuery([event_id, shop_number, description, area, rent, location, status])
-        return successResponse(res, 'Shop created successfully.');
+        const {event_id, shop_number, dome, description, area, rent, location, status} = req.body;
+        const [isExists] = await checkShopNumberQuery(shop_number);
+        if (isExists[0].count > 0) {
+            return notFoundResponse(res, "", `Shop number ${shop_number} already exists, please choose different shop number.`);
+        }
+        const [data] = await createShopQuery([event_id, shop_number, description, area, rent, dome, location, status])
+        return successResponse(res, {shop_id: data.insertId} ,'Shop created successfully.');
     } catch (error) {
         next(error);
     }
@@ -80,6 +84,24 @@ export const getShopById = async(req, res, next) =>{
         const {shop_id, event_id} = req.body;
         const [data] = await getShopsQuery([shop_id, event_id]);
         return successResponse(res, data, 'Shop fetched successfully.');
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getShopOccupancyDetails = async(req, res, next) => {
+    try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {flag, event_id} = req.body; //flag can be shop or month
+        const [data] = await getShopOccupancyDetailsQuery(flag, [event_id, event_id]);
+        if(data.length==0){
+            return notFoundResponse(res, "", "Data not found.");
+        }
+        return successResponse(res, data, 'Shop occupancy details fetched successfully.');
     } catch (error) {
         next(error);
     }

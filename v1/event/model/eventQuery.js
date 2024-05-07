@@ -90,6 +90,6 @@ export const deleteEventQuery = async(array)=>{
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing deleteEventQuery:", error);
-        throw err
+        throw error
     }
 }

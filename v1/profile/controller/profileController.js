@@ -134,6 +134,10 @@ export const verifyEmail = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
+        const [user] = await userDetailQuery([email]);
+        if (!user.length) {
+            return errorResponse(res, '', 'User not found');
+        }
         otp = parseInt(otp, 10);
         const [user_otp] = await getOtpQuery([email]);
         if (otp === user_otp[0].otp) {
