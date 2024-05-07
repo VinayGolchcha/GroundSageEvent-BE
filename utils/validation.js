@@ -82,6 +82,7 @@ export const addShopVal = [
     body('description').notEmpty().withMessage('description cannot be empty.').isString().withMessage("Invalid description input."),
     body('area').notEmpty().withMessage('area cannot be empty.').isInt().withMessage("Invalid area input."),
     body('rent').notEmpty().withMessage('rent cannot be empty.').isInt().withMessage("Invalid rent input."),
+    body('dome').notEmpty().withMessage('dome cannot be empty.').isString().withMessage("Invalid dome input."),
     body('location').notEmpty().withMessage('location cannot be empty.').isString().withMessage("Invalid location input."),
     body('status').notEmpty().withMessage('status cannot be empty.').isString().withMessage("Invalid status input."),
 ]
