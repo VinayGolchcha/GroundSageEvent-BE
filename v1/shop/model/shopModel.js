@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS shops (
     description text NOT NULL,
     area varchar(255) NOT NULL,
     rent int NOT NULL,
+    dome varchar(255) NOT NULL,
     location varchar(255) NOT NULL,
     status varchar(255) NOT NULL,
     created_at datetime DEFAULT CURRENT_TIMESTAMP,

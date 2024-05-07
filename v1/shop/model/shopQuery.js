@@ -2,7 +2,7 @@ import pool from "../../../config/db.js"
 
 export const createShopQuery=(array) =>{
     try {
-        let query = `INSERT INTO shops (event_id, shop_number, description, area, rent, location, status) VALUES(?,?,?,?,?,?,?)`
+        let query = `INSERT INTO shops (event_id, shop_number, description, area, rent, dome, location, status) VALUES(?,?,?,?,?,?,?,?)`
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing createShopQuery:", error);

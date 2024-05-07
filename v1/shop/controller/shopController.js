@@ -12,12 +12,12 @@ export const createShop = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const {event_id, shop_number, description, area, rent, location, status} = req.body;
+        const {event_id, shop_number, dome, description, area, rent, location, status} = req.body;
         const [isExists] = await checkShopNumberQuery(shop_number);
         if (isExists[0].count > 0) {
             return notFoundResponse(res, "", `Shop number ${shop_number} already exists, please choose different shop number.`);
         }
-        const [data] = await createShopQuery([event_id, shop_number, description, area, rent, location, status])
+        const [data] = await createShopQuery([event_id, shop_number, description, area, rent, dome, location, status])
         return successResponse(res, {shop_id: data.insertId} ,'Shop created successfully.');
     } catch (error) {
         next(error);
