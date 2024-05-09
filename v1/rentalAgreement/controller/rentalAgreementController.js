@@ -14,8 +14,14 @@ export const addRentalAndTenantAgreement = async (req, res, next) => {
     }
     const { name, email, phone_number, address, id_document,_id, shop_id, tenant_id, start_date, end_date, rent_amount, rent_mode, event_id} = req.body;
     const array1 = [name, email, phone_number, address, id_document];
+<<<<<<< HEAD
     const array2 = [shop_id, 'test', start_date, end_date, rent_amount, rent_mode, event_id]; 
     await addRentalAndTenantAgreementQuery(array1, array2);
+=======
+
+    const array3 = [shop_id, tenant_id, start_date, end_date, rent_amount, rent_mode, event_id]; 
+    await addRentalAndTenantAgreementQuery(array1,array3);
+>>>>>>> 326dfeb (#all reports in one file.)
     return successResponse(res,"Rental And Tenant Agreement successfully registered" );
   } catch (error) {
     next(error);

@@ -1,7 +1,11 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
+<<<<<<< HEAD
 import { addTeamQuery, fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery, fetchUserTeamQuery, getUserEventTeamQuery ,getTotalTeamsAndEventsQuery,fetchUsersAndTeamsQuery} from "../model/teamQuery.js";
+=======
+import { addTeamQuery, fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery, fetchUserTeamQuery, getUserEventTeamQuery ,getTotalTeamsAndEventsQuery} from "../model/teamQuery.js";
+>>>>>>> 326dfeb (#all reports in one file.)
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
@@ -110,14 +114,22 @@ export const fetchUserTeams = async (req, res, next) => {
   }
 };
 
+<<<<<<< HEAD
 export const fetchUsersAndTeams = async (req, res, next) => {
+=======
+export const fetchUserAndTeams = async (req, res, next) => {
+>>>>>>> 326dfeb (#all reports in one file.)
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
     const { event_id } = req.body;
+<<<<<<< HEAD
     const [data] = await fetchUsersAndTeamsQuery([event_id]);
+=======
+    const [data] = await fetchUsersandTeamQuery([event_id]);
+>>>>>>> 326dfeb (#all reports in one file.)
     if (data.length == 0) {
       return errorResponse(res, '', 'Data not found.');
     }
@@ -143,4 +155,7 @@ export const getTotalTeamsAndEvents = async (req, res, next) => {
     next(error);
   }
 };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 326dfeb (#all reports in one file.)
