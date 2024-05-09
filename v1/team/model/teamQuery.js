@@ -98,7 +98,7 @@ export const fetchUsersAndTeamsQuery = (array) =>{
         FROM userteams
         INNER JOIN profiles ON userteams.user_id = profiles.id
         INNER JOIN teams ON userteams.team_id = teams.id
-        WHERE teams.event_id =1114; `
+        WHERE teams.event_id =?; `
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing fetchUsersAndTeamQuery:",error);

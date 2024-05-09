@@ -1,14 +1,12 @@
 import pool from "../../../config/db.js";
 
-export const addRentalAndTenantAgreementQuery = async (array1, array2,array3
-) => {
+export const addRentalAndTenantAgreementQuery = async (array1, array2) => {
   try {
     let query1 = `INSERT INTO tenants(name,email,phone_number,address,id_document) VALUES (?,?,?,?,?)`;
-     let query2 = `SELECT * FROM  tenants ORDER BY _id DESC;`
-    let query3 = `INSERT INTO Rentalagreements(shop_id,tenant_id,start_date,end_date,rent_amount,rent_mode,event_id) VALUES (?,?,?,?,?,?,?)`;
-    pool.query(query1, array1);
-     pool.query(query2)
-    pool.query(query3, array3);
+    let query2 = `INSERT INTO Rentalagreements(shop_id,tenant_id,start_date,end_date,rent_amount,rent_mode,event_id) VALUES (?,?,?,?,?,?,?)`;
+    const res = await pool.query(query1, array1);
+    array2[1] = res[0].insertId;
+    const res2 =  await pool.query(query2, array2);
   } catch (error) {
     console.error("Error executing addRentalAndTenantAgreementQuery:", error);
     throw error;
