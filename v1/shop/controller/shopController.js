@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery} from '../../helpers/functions.js'
-import {createShopQuery, deleteShopQuery, getAllShopsQuery, getLastShopDataQuery, getShopOccupancyDetailsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
+import {checkShopNumberQuery, createShopQuery, deleteShopQuery, getAllShopsQuery, getLastShopDataQuery, getShopOccupancyDetailsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
 dotenv.config();
 
 export const createShop = async (req, res, next) => {
@@ -12,16 +12,28 @@ export const createShop = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const {event_id, dome, description, area, rent, location, status} = req.body;
-        let shop_number;
-        const [last_shop_added_data] = await getLastShopDataQuery();
-        if(last_shop_added_data.length==0){
-            shop_number = 1
-        }else{
-            shop_number = last_shop_added_data[0].shop_number + 1
+        const {event_id, shop_number, dome, description, area, rent, location, status} = req.body;
+        const [isExists] = await checkShopNumberQuery(shop_number);
+        if (isExists[0].count > 0) {
+            return notFoundResponse(res, "", `Shop number ${shop_number} already exists, please choose different shop number.`);
         }
         const [data] = await createShopQuery([event_id, shop_number, description, area, rent, dome, location, status])
-        return successResponse(res, {shop_id: data.insertId} ,'Shop created successfully.');
+        return successResponse(res, {shop_id: data.insertId, shop_number: shop_number } ,'Shop created successfully.');
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getLastShopNumber =  async (req, res, next) => {
+    try {
+        let shop_number;
+        const [shop_data] = await getLastShopDataQuery();
+        if(shop_data.length == 0) {
+            shop_number = 1;
+        }else{
+            shop_number = shop_data[0].shop_number + 1
+        }
+        return successResponse(res, {shop_number: shop_number} ,'Shop created successfully.');
     } catch (error) {
         next(error);
     }
