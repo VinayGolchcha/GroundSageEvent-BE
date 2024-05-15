@@ -78,6 +78,7 @@ export const joinEventTeamVal = [
 
 export const addShopVal = [
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
+    body('shop_number').notEmpty().withMessage('shop_number cannot be empty.').isInt().withMessage("Invalid shop_number input."),
     body('description').notEmpty().withMessage('description cannot be empty.').isString().withMessage("Invalid description input."),
     body('area').notEmpty().withMessage('area cannot be empty.').isInt().withMessage("Invalid area input."),
     body('rent').notEmpty().withMessage('rent cannot be empty.').isInt().withMessage("Invalid rent input."),
