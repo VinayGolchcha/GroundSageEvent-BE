@@ -198,10 +198,10 @@ export const deleteRolesVal = [
     body('date').notEmpty().withMessage('date cannot be empty.').isDate().withMessage("Invalid date input."),
  ]
  export const deleteNoteVal =[
-    body('ids').isInt().withMessage('Invalid ids input.').notEmpty().withMessage(' ids cannot be empty.'),
+    body('ids').isArray().withMessage('Invalid ids input.').notEmpty().withMessage(' ids cannot be empty.'),
  ]
  export const updateNoteVal =[
-    param('id').isArray().withMessage('Invalid note id input.').notEmpty().withMessage('  id cannot be empty.'),
+    param('id').isInt().withMessage('Invalid note id input.').notEmpty().withMessage('  id cannot be empty.'),
     body('date').optional().isDate().withMessage('Invalid date input.').notEmpty().withMessage(' date cannot be empty.'),
     body('notes_heading').optional().isString().withMessage('Invalid note heading input.').notEmpty().withMessage(' note heading cannot be empty.'),
     body('notes_description').optional().isString().withMessage('Invalid note description input.').notEmpty().withMessage(' note description cannot be empty.')
