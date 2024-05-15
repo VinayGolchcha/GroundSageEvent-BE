@@ -61,8 +61,9 @@ export const deleteNote = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const  _id  = req.params.id;
-    await deleteNoteQuery([_id]);
+    const  {ids}  = req.body;
+    const data = await deleteNoteQuery(ids);
+    console.log(data);
     return successResponse(res, "", " notes deleted successfully");
   } catch (error) {
     next(error);

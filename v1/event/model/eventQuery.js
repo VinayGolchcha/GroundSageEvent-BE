@@ -65,15 +65,21 @@ export const updateEventQuery = (query, array)=> {
     }
 }
 
-export const getAllEventsQuery = async() =>{
+export const getEventsByUserId = async (userId) => {
     try {
-        let query = `SELECT * FROM events`
-        return pool.query(query);
+        let query = `
+            SELECT userEvents.user_id, events.*
+            FROM events 
+            INNER JOIN userEvents ON events.id = userEvents.event_id 
+            WHERE userEvents.user_id = ?`;
+
+        return pool.query(query,userId);
     } catch (error) {
-        console.error("Error executing getAlleventsQuery:", error);
+        console.error("Error executing getEventsByUserId:", error);
         throw error;
     }
 }
+
 export const getEventQuery = async(array) =>{
     try {
         let query = `SELECT * FROM events WHERE id = ?`

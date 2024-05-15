@@ -10,12 +10,12 @@ export const createShopQuery=(array) =>{
     }
 }
 
-export const checkShopNumberQuery = (shopNumber) => {
+export const getLastShopDataQuery = (shopNumber) => {
     try {
-        let query = `SELECT COUNT(*) AS count FROM shops WHERE shop_number = ?`;
+        let query = `SELECT * FROM shops ORDER BY id DESC LIMIT 1`;
         return pool.query(query, [shopNumber]);
     } catch (error) {
-        console.error("Error executing checkShopNumberQuery:", error);
+        console.error("Error executing getLastShopDataQuery:", error);
         throw error;
     }
 }
