@@ -163,7 +163,6 @@ export const deleteRolesVal = [
  ]
  export const addRentalAndTenantAgreementVal= [
     body('shop_id').isInt().withMessage('Invalid shop_id input.').notEmpty().withMessage(' shop id cannot be empty.'),
-    body('tenant_id').isInt().withMessage('Invalid tenant_id input.').notEmpty().withMessage(' tenant id cannot be empty.'),
     body('rent_amount').isInt().withMessage('Invalid rent amount input.').notEmpty().withMessage(' rent amount cannot be empty.'),
     body('id_document').isURL().withMessage('Invalid id document input.').notEmpty().withMessage(' id document cannot be empty.'),
     body('start_date').isDate().withMessage('Invalid start date input.').notEmpty().withMessage(' shop id cannot be empty.'),
@@ -199,14 +198,14 @@ export const deleteRolesVal = [
     body('date').notEmpty().withMessage('date cannot be empty.').isDate().withMessage("Invalid date input."),
  ]
  export const deleteNoteVal =[
-    param('id').isInt().withMessage('Invalid _id input.').notEmpty().withMessage(' id cannot be empty.'),
+    body('ids').isInt().withMessage('Invalid ids input.').notEmpty().withMessage(' ids cannot be empty.'),
  ]
  export const updateNoteVal =[
-    param('id').isInt().withMessage('Invalid   note id input.').notEmpty().withMessage('  id cannot be empty.'),
+    param('id').isArray().withMessage('Invalid note id input.').notEmpty().withMessage('  id cannot be empty.'),
     body('date').optional().isDate().withMessage('Invalid date input.').notEmpty().withMessage(' date cannot be empty.'),
     body('notes_heading').optional().isString().withMessage('Invalid note heading input.').notEmpty().withMessage(' note heading cannot be empty.'),
     body('notes_description').optional().isString().withMessage('Invalid note description input.').notEmpty().withMessage(' note description cannot be empty.')
- ]
+]
 
  export const getCurrentEventTeamUserIdVal = [
     body('user_id').notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input.")

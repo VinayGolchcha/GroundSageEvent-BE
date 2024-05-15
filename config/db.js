@@ -21,6 +21,7 @@ export let rootConnection = mysql
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
     connectTimeout: 20000,
+    port: process.env.MYSQL_PORT
 })
  .promise();
 // console.log(rootConnection);
@@ -29,7 +30,8 @@ pool = mysql.createPool({
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASSWORD,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+    port: process.env.MYSQL_PORT
 }).promise();
 export const setupDatabase = async() => {
     try{

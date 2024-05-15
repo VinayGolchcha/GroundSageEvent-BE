@@ -19,15 +19,23 @@ export const fetchNoteQuery = () => {
     throw error;
   }
 };
-export const deleteNoteQuery = async (_id) => {
+
+export const deleteNoteQuery = async (ids) => {
   try {
-    let query = `DELETE FROM notes WHERE _id = ?`;
-    return await pool.query(query, [_id]);
+    // Create an array to store the promises of each deletion query
+    const deletionPromises = ids.map(async (id) => {
+      const query = `DELETE FROM notes WHERE _id = ?`;
+      return await pool.query(query, [id]);
+    });
+    
+    // Execute all deletion queries asynchronously and wait for all of them to complete
+    return await Promise.all(deletionPromises);
   } catch (error) {
     console.error("Error executing deleteNoteQuery:", error);
     throw error;
   }
 };
+
 export const updateNoteQuery = (query, array) => {
   try {
     return pool.query(query, array);

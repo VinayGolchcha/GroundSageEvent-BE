@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery, generateReferralCode} from '../../helpers/functions.js'
-import {createEventQuery, getAllEventsQuery, getEventQuery, getLastEventIdQuery, getLastTeamIdQuery, getRoleIdQuery, insertUserEventQuery, insertUserTeamQuery, updateEventQuery} from '../model/eventQuery.js'
+import {createEventQuery, getEventQuery, getEventsByUserId, getRoleIdQuery, insertUserEventQuery, insertUserTeamQuery, updateEventQuery} from '../model/eventQuery.js'
 import { addTeamQuery } from "../../team/model/teamQuery.js"
 import { addReferralCodeQuery, checkReferralCode, inactiveReferralCodeQuery, fetchUserDetailsByUserIdQuery,fetchEventDetailsByUserIdQuery } from "../model/referralCodesQuery.js"
 dotenv.config();
@@ -14,20 +14,21 @@ export const createEventTeamAndReferralCode = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const { event_name, event_description, start_date, end_date, team_name, team_size, user_id, role_name, coordinator_count, staff_members_count, helpers_count } = req.body;
-        await createEventQuery([event_name, event_description, start_date, end_date])
-        const [event_id] = await getLastEventIdQuery();
-        await addTeamQuery([team_name, team_size, event_id[0].id]);
-        await insertUserEventQuery([user_id, event_id[0].id]);
-        const [team_data] = await getLastTeamIdQuery();
+        const { event_name, event_description, start_date, end_date, team_name, team_size, user_id, role_name="coordinator", coordinator_count, staff_members_count, helpers_count } = req.body;
         const [role_id] = await getRoleIdQuery([role_name]);
-        await insertUserTeamQuery([user_id, team_data[0].id, role_id[0]._id]);
+        if(role_id.length==0){
+            return notFoundResponse(res, '', "role with this name doesn't exists.");
+        }
+        const event_data = await createEventQuery([event_name, event_description, start_date, end_date])
+        const team_data = await addTeamQuery([team_name, team_size, event_data[0].insertId]);
+        await insertUserEventQuery([user_id, event_data[0].insertId]);
+        await insertUserTeamQuery([user_id, team_data[0].insertId, role_id[0]._id]);
 
         async function generateReferralCodesForRole(role_type, count) {
             for (let i = 0; i < count; i++) {
                 let referral_code = generateReferralCode(10); 
                 let [role_id] = await getRoleIdQuery([role_type]);
-                await addReferralCodeQuery([referral_code, event_id[0].id, team_data[0].id, role_id[0]._id ]);
+                await addReferralCodeQuery([referral_code, event_data[0].insertId, team_data[0].insertId, role_id[0]._id ]);
             }
         }
 
@@ -67,9 +68,13 @@ export const updateEvent = async(req, res, next) => {
     }
 }
 
-export const getAllEvents = async (req, res, next) => {
+export const getAllUserEvents = async (req, res, next) => {
     try {
-        const [data] = await getAllEventsQuery();
+        const user_id = req.params.id
+        const [data] = await getEventsByUserId([user_id]);
+        if (data.length==0) {
+            return errorResponse(res, '', 'Data not found.');
+        }
         return successResponse(res, data, 'Events fetched successfully.');
     } catch (error) {
         next(error);
