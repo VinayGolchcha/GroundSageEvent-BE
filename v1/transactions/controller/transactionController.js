@@ -114,18 +114,20 @@ export const fetchAllYearsData = async (req, res, next) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-            return errorResponse(res, errors.array(), "")
+            return errorResponse(res, errors.array(), "");
         }
-        const {flag,type,event_id} = req.body;
-        const [data] = await fetchAllYearsDataQuery([flag,type, event_id]);
-        if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
+        const { flag, type, event_id } = req.body;
+        const [data] = await fetchAllYearsDataQuery([event_id, type, flag]);
+        if (data.length === 0) {
+            return errorResponse(res, "", "Data not found.");
         }
-        return successResponse(res, data, 'fetch all years data successfull');
+        res.json(data);
+        return successResponse(res, data, 'fetch all yeara data successfull');
     } catch (error) {
         next(error);
     }
-}
+};
+
 
 export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next) => {
     try {

@@ -137,14 +137,13 @@ export const fetchYearlyDataQuery = async(array) => {
     try{
         let query =`SELECT 
         YEAR(created_at) AS year,
-        tag AS type,
-        SUM (entered_amount) AS total,
-        SUM(CASE WHEN type= 'shop rental' THEN entered_amount ) AS shop_rental_total,
-        SUM(CASE WHEN type = 'shop rental' THEN entered_amount) AS others_total,
+        SUM(entered_amount) AS total,
+        SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
+        SUM(CASE WHEN type != 'shop rental' THEN entered_amount ELSE 0 END) AS others_total
     FROM 
         transactions
     WHERE 
-        year(created_at) = ? AND type = ?
+        YEAR(created_at) = ? AND tag = 
     GROUP BY 
         YEAR(created_at);`
     return await pool.query(query, array);
@@ -154,83 +153,88 @@ export const fetchYearlyDataQuery = async(array) => {
 }
 }
 
-export const fetchAllYearsDataQuery = (event_id, tag, flag) => {
+export const fetchAllYearsDataQuery = async (event_id, tag, flag) => {
     try {
         let query;
-        if (flag == "year") {
-            if(tag == "income"){
-                query = `SELECT 
-                YEAR(created_at) AS year,
-                SUM(entered_amount) AS total,
-                SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
-                SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
-            FROM transactions
-            WHERE 
-                event_id = ? 
-                AND tag = 'income'
-            GROUP BY YEAR(created_at)
-            ORDER BY YEAR(created_at) ASC;`
+        if (flag === "year") {
+            if (tag === "income") {
+                query = `
+                    SELECT 
+                        YEAR(created_at) AS year,
+                        SUM(entered_amount) AS total,
+                        SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
+                        SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                    FROM transactions
+                    WHERE 
+                        event_id = ? 
+                        AND tag = 'income'
+                    GROUP BY YEAR(created_at)
+                    ORDER BY YEAR(created_at) ASC;
+                `;
+            } else if (tag === "expense") {
+                query = `
+                    SELECT 
+                        YEAR(created_at) AS year,
+                        SUM(entered_amount) AS total,
+                        SUM(CASE WHEN type = 'staff salary' THEN entered_amount ELSE 0 END) AS staff_salary_total,
+                        SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                    FROM transactions
+                    WHERE 
+                        event_id = ? 
+                        AND tag = 'expense'
+                    GROUP BY YEAR(created_at)
+                    ORDER BY YEAR(created_at) ASC;
+                `;
             }
-            if(tag == "expense"){
-                query = `SELECT 
-                YEAR(created_at) AS year,
-                SUM(entered_amount) AS total,
-                SUM(CASE WHEN type = 'staff salary' THEN entered_amount ELSE 0 END) AS staff_salary_total,
-                SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
-            FROM transactions
-            WHERE 
-                event_id = ? 
-                AND tag = 'expense'
-            GROUP BY YEAR(created_at)
-            ORDER BY YEAR(created_at) ASC;`
-            }
-        }
-        if (flag == "month") {
-            if(tag =="income"){
-                query = `SELECT 
-                CONCAT(DATE_FORMAT(month_year, '%M %Y')) AS month,
-                SUM(shop_rental_total) AS shop_rental_total,
-                SUM(other_total) AS other_total,
-                SUM(total) AS total
-            FROM (
-                SELECT 
-                    DATE_FORMAT(created_at, '%Y-%m-01') AS month_year,
-                    SUM(entered_amount) AS total,
-                    SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
-                    SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
-                FROM transactions
-                WHERE 
-                    event_id = ?
-                    AND tag = 'income'
-                    AND created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 12 MONTH)
-                    AND created_at <= LAST_DAY(CURRENT_DATE())
-                GROUP BY month_year
-            ) AS subquery
-            GROUP BY month_year
-            ORDER BY month_year ASC;`
-            }
-            if(tag =="expense"){
-                query = `SELECT 
-                CONCAT(DATE_FORMAT(month_year, '%M %Y')) AS month,
-                SUM(staff_salary_total) AS staff_salary_total,
-                SUM(other_total) AS other_total,
-                SUM(total) AS total
-            FROM (
-                SELECT 
-                    DATE_FORMAT(created_at, '%Y-%m-01') AS month_year,
-                    SUM(entered_amount) AS total,
-                    SUM(CASE WHEN type = 'staff salary' THEN entered_amount ELSE 0 END) AS staff_salary_total,
-                    SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
-                FROM transactions
-                WHERE 
-                    event_id = ?
-                    AND tag = 'expense'
-                    AND created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 12 MONTH)
-                    AND created_at <= LAST_DAY(CURRENT_DATE())
-                GROUP BY month_year
-            ) AS subquery
-            GROUP BY month_year
-            ORDER BY month_year ASC;`
+        } else if (flag === "month") {
+            if (tag === "income") {
+                query = `
+                    SELECT 
+                        DATE_FORMAT(month_year, '%M %Y') AS month,
+                        SUM(shop_rental_total) AS shop_rental_total,
+                        SUM(other_total) AS other_total,
+                        SUM(total) AS total
+                    FROM (
+                        SELECT 
+                            DATE_FORMAT(created_at, '%Y-%m-01') AS month_year,
+                            SUM(entered_amount) AS total,
+                            SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
+                            SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                        FROM transactions
+                        WHERE 
+                            event_id = ?
+                            AND tag = 'income'
+                            AND created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 12 MONTH)
+                            AND created_at <= LAST_DAY(CURRENT_DATE())
+                        GROUP BY month_year
+                    ) AS subquery
+                    GROUP BY month_year
+                    ORDER BY month_year ASC;
+                `;
+            } else if (tag === "expense") {
+                query = `
+                    SELECT 
+                        DATE_FORMAT(month_year, '%M %Y') AS month,
+                        SUM(staff_salary_total) AS staff_salary_total,
+                        SUM(other_total) AS other_total,
+                        SUM(total) AS total
+                    FROM (
+                        SELECT 
+                            DATE_FORMAT(created_at, '%Y-%m-01') AS month_year,
+                            SUM(entered_amount) AS total,
+                            SUM(CASE WHEN type = 'staff salary' THEN entered_amount ELSE 0 END) AS staff_salary_total,
+                            SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                        FROM transactions
+                        WHERE 
+                            event_id = ?
+                            AND tag = 'expense'
+                            AND created_at >= DATE_SUB(CURRENT_DATE(), INTERVAL 12 MONTH)
+                            AND created_at <= LAST_DAY(CURRENT_DATE())
+                        GROUP BY month_year
+                    ) AS subquery
+                    GROUP BY month_year
+                    ORDER BY month_year ASC;
+                `;
             }
         }
         return pool.query(query, [event_id]);
@@ -239,6 +243,8 @@ export const fetchAllYearsDataQuery = (event_id, tag, flag) => {
         throw error;
     }
 }
+
+
 
 export const fetchTenantsReportDataQuery = (array) => {
     try {

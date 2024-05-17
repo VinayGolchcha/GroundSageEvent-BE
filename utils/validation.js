@@ -241,12 +241,10 @@ export const fetchYearlyDataVal = [
 
 export const fetchAllYearsDataVal = [
     body('flag').notEmpty().withMessage('flag cannot be empty.').isString().withMessage("Invalid flag input."),
-    body('type').notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
+   // body('type').notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
 ]
 
 export const fetchTenantsReportDataVal = [
-    body('start_date').notEmpty().withMessage('start date cannot be empty.').isDate().withMessage("Invalid start date input."),
-    body('end_date').notEmpty().withMessage('end date cannot be empty.').isDate().withMessage("Invalid end date input."),
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
 ]

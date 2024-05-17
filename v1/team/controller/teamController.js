@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
-import {  fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery, fetchUserTeamQuery, getUserEventTeamQuery ,getTotalTeamsAndEventsQuery,fetchUsersAndTeamsQuery} from "../model/teamQuery.js";
+import {  fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery ,getTotalTeamsAndEventsQuery,fetchUsersAndTeamsQuery} from "../model/teamQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
@@ -57,7 +57,6 @@ export const updateTeam = async (req, res, next) => {
   }
 }
 
-
 export const deleteTeam = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -76,40 +75,6 @@ export const deleteTeam = async (req, res, next) => {
   }
 }
 
-export const getUserEventTeamCount = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "");
-    }
-    const { user_id } = req.body;
-    const [data] = await getUserEventTeamQuery([user_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    return successResponse(res, data, "list of event and team fetched successfully");
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const fetchUserTeams = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "");
-    }
-    const { event_id } = req.body;
-    const [data] = await fetchUserTeamQuery([event_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    return successResponse(res, data, "User teams fetched successfully.");
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const fetchUsersAndTeams = async (req, res, next) => {
   try {
     const errors = validationResult(req);
@@ -117,7 +82,7 @@ export const fetchUsersAndTeams = async (req, res, next) => {
       return errorResponse(res, errors.array(), "");
     }
     const { event_id } = req.body;
-    const [data] = await fetchUsersAndTeamsQuery([event_id]);
+     const[data]=await fetchUsersAndTeamsQuery([event_id]);
     if (data.length == 0) {
       return errorResponse(res, '', 'Data not found.');
     }
