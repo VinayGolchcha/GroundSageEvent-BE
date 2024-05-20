@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS shops (
     rent int NOT NULL,
     dome varchar(255) NOT NULL,
     location varchar(255) NOT NULL,
-    status varchar(255) NOT NULL,
+    status ENUM('vacant', 'occupied') DEFAULT 'vacant',
     created_at datetime DEFAULT CURRENT_TIMESTAMP,
     updated_at datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
