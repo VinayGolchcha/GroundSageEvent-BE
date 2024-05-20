@@ -13,9 +13,9 @@ app.post('/forgot-password', updatePassword, updateUserPassword);
 app.post('/send-otp', sendOtp, sendOtpForEmailVerification)
 app.post('/verify-email', verifyOtp, verifyEmail)
 app.post('/check-email-verification', sendOtp, checkEmailVerification)
-app.get('/get-user-current-team-event-data',getCurrentEventTeamUserIdVal, getCurrentEventTeamAndRoleBasedOnUserId)
-app.get('/get-all-user-events',getCurrentEventTeamUserIdVal, getAllEventsBasedOnUserId)
-app.get('/get-user-event-and-team-count',getCurrentEventTeamUserIdVal, getUserEventAndTeamCount)
+app.post('/get-user-current-team-event-data',getCurrentEventTeamUserIdVal, getCurrentEventTeamAndRoleBasedOnUserId)
+app.post('/get-all-user-events',getCurrentEventTeamUserIdVal, getAllEventsBasedOnUserId)
+app.post('/get-user-event-and-team-count',getCurrentEventTeamUserIdVal, getUserEventAndTeamCount)
 
 router.get('/logout/:id', userLogout);
 

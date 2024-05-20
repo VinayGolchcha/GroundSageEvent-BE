@@ -10,7 +10,7 @@ router.use(authenticateToken);
 app.post('/add-rental-agreement',addRentalAndTenantAgreementVal,addRentalAndTenantAgreement);
 app.put('/edit-rental-agreement/:shopid/:id',editRentalAgreementVal, editRentalAgreement);
 app.delete('/delete-rental-agreement',deleteRentalAgreementVal, deleteRentalAgreement);
-app.get('/fetch-rental-agreement',fetchRentalAgreementVal, fetchRentalAgreement);
+app.post('/fetch-rental-agreement',fetchRentalAgreementVal, fetchRentalAgreement);
     
 app.use("/", router);
 
