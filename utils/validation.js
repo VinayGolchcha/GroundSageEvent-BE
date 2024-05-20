@@ -98,12 +98,14 @@ export const updateShopVal = [
 ]
 
 export const deleteShopVal = [
-    param('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
-    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input."),
+    body('ids').notEmpty().withMessage('id cannot be empty.').isArray().withMessage("Invalid id input."),
 ]
 export const getShopByIdVal = [
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
     body('shop_id').notEmpty().withMessage('shop_id cannot be empty.').isInt().withMessage("Invalid shop id input."),
+]
+export const getAllShopByEventIdVal = [
+    param('id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input."),
 ]
 // addTransactionVal,updateTransactionVal, deleteTransactionVal, fetchTransactionVal
 

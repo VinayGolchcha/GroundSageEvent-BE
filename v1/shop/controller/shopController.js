@@ -2,7 +2,7 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery} from '../../helpers/functions.js'
-import {checkShopNumberQuery, createShopQuery, deleteShopQuery, getAllShopsQuery, getLastShopDataQuery, getShopOccupancyDetailsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
+import {checkShopNumberQuery, createShopQuery, deleteShopQuery, getAllShopsByEventIdQuery, getLastShopDataQuery, getShopOccupancyDetailsQuery, getShopsQuery, updateShopQuery} from '../model/shopQuery.js'
 dotenv.config();
 
 export const createShop = async (req, res, next) => {
@@ -12,7 +12,10 @@ export const createShop = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const {event_id, shop_number, dome, description, area, rent, location, status} = req.body;
+        let {event_id, shop_number, dome, description, area, rent, location, status} = req.body;
+        status = status.toLowerCase();
+        description = description.toLowerCase();
+        dome = dome.toLowerCase();
         const [isExists] = await checkShopNumberQuery(shop_number);
         if (isExists[0].count > 0) {
             return notFoundResponse(res, "", `Shop number ${shop_number} already exists, please choose different shop number.`);
@@ -67,9 +70,10 @@ export const updateShop = async(req, res, next) => {
     }
 }
 
-export const getAllShops = async (req, res, next) => {
+export const getAllShopsByEventId = async (req, res, next) => {
     try {
-        const [data] = await getAllShopsQuery();
+        const event_id = req.params.id
+        const [data] = await getAllShopsByEventIdQuery([event_id]);
         if(data.length==0){
             return notFoundResponse(res, "", "Data not found.");
         }
@@ -81,13 +85,14 @@ export const getAllShops = async (req, res, next) => {
 
 export const deleteShop = async (req, res, next) => {
     try {
-        const shop_id = req.params.id;
-        const event_id = req.params.event_id;
-        const [data] = await getShopsQuery([shop_id, event_id]);
-        if(data.length==0){
-            return notFoundResponse(res, "", "Data not found.");
+        const {ids} = req.body;
+        for (let i = 0; i < ids.length; i++){
+            const [data] = await getShopsQuery([ids[i].shop_id, ids[i].event_id]);
+            if(data.length==0){
+                return notFoundResponse(res, "", `Shop with id ${ids[i].shop_id} not found.`);
+            }
+            await deleteShopQuery([ids[i].shop_id, ids[i].event_id]);
         }
-        await deleteShopQuery([shop_id, event_id]);
         return successResponse(res, 'Shop deleted successfully.');
     } catch (error) {
         next(error);
