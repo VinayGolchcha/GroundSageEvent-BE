@@ -34,6 +34,24 @@ export const insertTokenQuery = (array) => {
         throw error;
     }
 }
+export const getUserEventAndRoleDataQuery = (array) => {
+    try {
+        array = [1111]
+        let query = `SELECT e.id as event_id, e.event_name, ut.role_id, r.role_name
+        FROM events e
+        JOIN userEvents ue ON e.id = ue.event_id
+        JOIN teams t ON e.id = t.event_id
+        JOIN userTeams ut ON t.id = ut.team_id AND ue.user_id = ut.user_id
+        JOIN roles r ON r._id = ut.role_id
+        WHERE ue.user_id = ?
+        AND e.end_date >= CURDATE()
+        ORDER BY ue.created_at DESC
+        LIMIT 1;`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing getUserEventAndRoleDataQuery:", error);
+    }
+}
 
 export const updateUserPasswordQuery = (array) => {
     try {

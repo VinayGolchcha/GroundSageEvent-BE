@@ -25,8 +25,7 @@ export const fetchNotes = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { created_at } = req.body;
-     const [data] = await fetchNoteQuery([created_at]);
+     const [data] = await fetchNoteQuery();
     if (data.length == 0) {
       return errorResponse(res, "", "Data not found.");
     }

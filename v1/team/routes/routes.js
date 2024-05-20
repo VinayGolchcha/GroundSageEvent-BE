@@ -9,10 +9,10 @@ import {updateTeamVal, fetchTeamVal} from '../../../utils/validation.js';
 router.use(authenticateToken);
 
 app.put('/update-team/:id',updateTeamVal, updateTeam);
-app.get('/fetch-team',fetchTeamVal, fetchTeam);
+app.post('/fetch-team',fetchTeamVal, fetchTeam);
 app.get('/fetch-all-team', fetchAllTeams);
-app.get('/fetch-team-event-id-users',fetchUserTeams);
-app.get('/user-event-team-count' ,getUserEventTeamCount );    
+app.post('/fetch-team-event-id-users',fetchUserTeams);
+app.post('/user-event-team-count' ,getUserEventTeamCount );    
 
 app.use("/", router);
 
