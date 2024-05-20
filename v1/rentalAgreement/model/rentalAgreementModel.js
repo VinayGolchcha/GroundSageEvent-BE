@@ -10,7 +10,7 @@
     rent_mode ENUM('day', 'week', 'month'),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (shop_id) REFERENCES shops(id),
+    FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
     FOREIGN KEY (tenant_id) REFERENCES tenants(_id),
     FOREIGN KEY (event_id) REFERENCES events(id)
 ) AUTO_INCREMENT = 1111`;
