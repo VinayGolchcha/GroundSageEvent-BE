@@ -11,8 +11,8 @@ app.post('/create-shop',addShopVal, createShop);
 app.put('/update-shop/:id/:event_id',updateShopVal, updateShop);
 app.delete('/delete-shop',deleteShopVal, deleteShop);
 app.get('/fetch-all-shop/:id',getAllShopByEventIdVal, getAllShopsByEventId);
-app.get('/fetch-shop',getShopByIdVal, getShopById);
-app.get('/fetch-shop-occupancy-data',getShopOccupancyDetailsVal, getShopOccupancyDetails);
+app.post('/fetch-shop',getShopByIdVal, getShopById);
+app.post('/fetch-shop-occupancy-data',getShopOccupancyDetailsVal, getShopOccupancyDetails);
 app.get('/fetch-last-shop-number', getLastShopNumber)
 
 app.use("/", router);
