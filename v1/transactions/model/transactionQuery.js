@@ -132,3 +132,23 @@ export const fetchOutstandingBalanceForIncomeAndExpenseQuery = (event_id, tag, f
         throw error;
     }
 }
+
+export const uploadFilesQuery = async(array)=>{
+    try {
+        console.log("array", array);
+        let query = `INSERT INTO documents (file_name, buffer) VALUES (?,?)`;
+        return await pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing uploadFilesQuery:", error);
+        throw error;
+    }
+}
+export const getUploadFilesQuery = async(array)=>{
+    try {
+        let query = `SELECT * FROM documents`;
+        return await pool.query(query);
+    } catch (error) {
+        console.error("Error executing getUploadFilesQuery:", error);
+        throw error;
+    }
+}

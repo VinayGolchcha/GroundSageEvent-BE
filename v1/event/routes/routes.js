@@ -2,10 +2,9 @@ import express, { Router } from 'express';
 const app = express()
 const router = Router();
 
-import authenticateToken from '../../../middlewares/auth.js';
+import {authenticateToken} from '../../../middlewares/roleAuth.js';
 import {createEventTeamAndReferralCode, getAllUserEvents, updateEvent, joinUserTeamWithReferralCode} from '../controller/eventController.js';
 import {createEventVal, updateEventVal, joinEventTeamVal} from '../../../utils/validation.js';
-router.use(authenticateToken)
 
 app.post('/create-event-team-and-referral-code',createEventVal, createEventTeamAndReferralCode);
 app.post('/update-event/:id',updateEventVal, updateEvent);
