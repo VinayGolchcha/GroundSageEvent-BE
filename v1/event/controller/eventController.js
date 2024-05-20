@@ -2,9 +2,11 @@ import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery, generateReferralCode} from '../../helpers/functions.js'
-import {createEventQuery, getEventQuery, getEventsByUserId, getRoleIdQuery, insertUserEventQuery, insertUserTeamQuery, updateEventQuery} from '../model/eventQuery.js'
+import {createEventQuery, getEventQuery, getEventsByUserId, getRoleIdQuery, insertUserEventQuery, insertUserTeamQuery, 
+    updateEventQuery, fetchLastEventQuery} from '../model/eventQuery.js'
 import { addTeamQuery } from "../../team/model/teamQuery.js"
-import { addReferralCodeQuery, checkReferralCode, inactiveReferralCodeQuery, fetchUserDetailsByUserIdQuery,fetchEventDetailsByUserIdQuery } from "../model/referralCodesQuery.js"
+import { addReferralCodeQuery, checkReferralCode, inactiveReferralCodeQuery, fetchUserDetailsByUserIdQuery,fetchEventDetailsByUserIdQuery, 
+    fetchReferralCodesByEventAndTeamIdQuery } from "../model/referralCodesQuery.js"
 dotenv.config();
 
 export const createEventTeamAndReferralCode = async (req, res, next) => {
@@ -14,21 +16,24 @@ export const createEventTeamAndReferralCode = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
+
+        let response = []
         const { event_name, event_description, start_date, end_date, team_name, team_size, user_id, role_name="coordinator", coordinator_count, staff_members_count, helpers_count } = req.body;
         const [role_id] = await getRoleIdQuery([role_name]);
         if(role_id.length==0){
             return notFoundResponse(res, '', "role with this name doesn't exists.");
         }
-        const event_data = await createEventQuery([event_name, event_description, start_date, end_date])
-        const team_data = await addTeamQuery([team_name, team_size, event_data[0].insertId]);
-        await insertUserEventQuery([user_id, event_data[0].insertId]);
+        await createEventQuery([event_name, event_description, start_date, end_date])
+        const [event_data] = await fetchLastEventQuery()
+        const team_data = await addTeamQuery([team_name, team_size, event_data[0].id]);
+        await insertUserEventQuery([user_id, event_data[0].id]);
         await insertUserTeamQuery([user_id, team_data[0].insertId, role_id[0]._id]);
 
         async function generateReferralCodesForRole(role_type, count) {
             for (let i = 0; i < count; i++) {
                 let referral_code = generateReferralCode(10); 
                 let [role_id] = await getRoleIdQuery([role_type]);
-                await addReferralCodeQuery([referral_code, event_data[0].insertId, team_data[0].insertId, role_id[0]._id ]);
+                await addReferralCodeQuery([referral_code, event_data[0].id, team_data[0].insertId, role_id[0]._id ]);
             }
         }
 
@@ -36,7 +41,15 @@ export const createEventTeamAndReferralCode = async (req, res, next) => {
         await generateReferralCodesForRole("staff_member", staff_members_count);
         await generateReferralCodesForRole("helper", helpers_count);
 
-        return successResponse(res,"", 'Event and team created successfully.');
+        let [role_data] = await fetchReferralCodesByEventAndTeamIdQuery([event_data[0].id, team_data[0].insertId]);
+
+        let data = {
+            event_id: event_data[0].id,
+            event_name: event_data[0].event_name,
+            roles: role_data
+        }
+        response.push(data)
+        return successResponse(res, response,  'Event and team created successfully.');
     } catch (error) {
         next(error);
     }
@@ -123,7 +136,15 @@ export const joinUserTeamWithReferralCode = async(req, res, next) => {
         await insertUserEventQuery([user_id, referral_data[0].event_id]);
         await insertUserTeamQuery([user_id, referral_data[0].team_id, referral_data[0].role_id]);
         await inactiveReferralCodeQuery([referral_code]);
-        return successResponse(res, '', 'User joined event and team successfully.')
+
+        let data = {
+            event_id: referral_data[0].event_id,
+            event_name: referral_data[0].event_name,
+            role_id: referral_data[0].role_id,
+            team_id: referral_data[0].team_id,
+            user_id: user_id
+        }
+        return successResponse(res, data, 'User joined event and team successfully.')
     } catch (error) {
         next(error);
     }
