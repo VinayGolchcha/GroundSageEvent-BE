@@ -132,3 +132,8 @@ export const getShopOccupancyDetailsQuery = async(flag, array)=>{
         throw err
     }
 }
+
+export const getLastActivityIdQuery = () =>{
+    let query = `SELECT id FROM shops ORDER BY id DESC LIMIT 1`
+    return pool.query(query);
+}
