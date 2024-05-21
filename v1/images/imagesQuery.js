@@ -6,8 +6,9 @@ export const insertImageForShop= (array)=> {
         type,
         image_url,
         public_id,
-        shop_id
-    ) VALUES (?,?,?,?);`
+        shop_id,
+        original_filename
+    ) VALUES (?,?,?,?,?);`
     return pool.query(query, array);}
     catch(err){
         console.log("Error in executing in the insertImageForShop:" , err);
@@ -38,10 +39,36 @@ export const fetchImagesForShopQuery = (array)=> {
 
 export const fetchImagesBasedOnIdForShopQuery = (array)=> {
     try{
-    let query = `SELECT public_id, image_url FROM images WHERE shop_id = ?`
+    let query = `SELECT public_id, image_url, original_filename FROM images WHERE shop_id = ?`
     return pool.query(query, array);}
     catch(err){
         console.log("Error in executing in the fetchImagesBasedOnId:" , err);
+        throw(err);
+    }
+}
+
+export const insertImageForEventQuery= (array)=> {
+    try{
+    let query = `INSERT INTO images (
+        type,
+        image_url,
+        public_id,
+        event_id,
+        original_filename
+    ) VALUES (?,?,?,?,?);`
+    return pool.query(query, array);}
+    catch(err){
+        console.log("Error in executing in the insertImageForEventQuery:" , err);
+        throw(err);
+    }
+}
+
+export const fetchImagesBasedOnIdForEventQuery = (array)=> {
+    try{
+    let query = `SELECT public_id, image_url, original_filename FROM images WHERE shop_id = ?`
+    return pool.query(query, array);}
+    catch(err){
+        console.log("Error in executing in the fetchImagesBasedOnIdForEventQuery:" , err);
         throw(err);
     }
 }

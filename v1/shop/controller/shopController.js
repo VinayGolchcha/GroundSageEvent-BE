@@ -30,7 +30,7 @@ export const createShop = async (req, res, next) => {
         for (let image of files){
             const imageBuffer = image.buffer;
             let uploaded_data = await uploadImageToCloud(imageBuffer);
-            await insertImageForShop(["shop", uploaded_data.secure_url, uploaded_data.public_id, last_id[0].id])
+            await insertImageForShop(["shop", uploaded_data.secure_url, uploaded_data.public_id, last_id[0].id, image.originalname])
         }
 
         return successResponse(res, {shop_id: data.insertId, shop_number: shop_number} ,'Shop created successfully.');
@@ -94,7 +94,7 @@ export const updateShop = async(req, res, next) => {
         for (let image of files){
             const imageBuffer = image.buffer;
             let uploaded_data = await uploadImageToCloud(imageBuffer);
-            await insertImageForShop(["shop", uploaded_data.secure_url, uploaded_data.public_id, shop_id])
+            await insertImageForShop(["shop", uploaded_data.secure_url, uploaded_data.public_id, shop_id, image.originalname])
         }
 
         return successResponse(res, 'Shop updated successfully.');
