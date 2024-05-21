@@ -1,7 +1,7 @@
 import dotenv from "dotenv"
 import {validationResult} from "express-validator"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery, fetchOutstandingBalanceForIncomeAndExpenseQuery, uploadFilesQuery, getUploadFilesQuery} from "../model/transactionQuery.js"
+import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery, fetchOutstandingBalanceForIncomeAndExpenseQuery} from "../model/transactionQuery.js"
 import {incrementId, createDynamicUpdateQuery} from "../../helpers/functions.js"
 dotenv.config();
 
@@ -109,24 +109,3 @@ export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next)
         next(error);
     }
 };
-
-export const uploadFiles= async(req, res, next) => {
-    try {
-        const files = req.files;
-        const file_buffer = files[0].buffer
-        console.log("file_buffer", file_buffer);
-        const file_name = files[0].originalname
-        const [data] = await uploadFilesQuery([file_name,file_buffer])
-        res.status(200).json({ status_code: 200, status: 'success', data: data });
-    }catch(error){
-        res.status(500).json({ status_code: 500, status: 'failure', message: error.stack });
-    }
-}
-export const getUploadedFiles= async(req, res, next) => {
-    try {
-        const [data] = await getUploadFilesQuery()
-        res.status(200).json({ status_code: 200, status: 'success', data: data });
-    }catch(error){
-        res.status(500).json({ status_code: 500, status: 'failure', message: error.stack });
-    }
-}

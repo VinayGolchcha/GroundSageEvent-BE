@@ -1,8 +1,11 @@
 import pool from '../config/db.js';
 import jwt from "jsonwebtoken"
-import { successResponse, notFoundResponse, unAuthorizedResponse, errorResponse } from '../utils/response.js';
+import { unAuthorizedResponse } from '../utils/response.js';
 export const authenticateToken = async (req, res, next) => {
+
     const token = req.body.token || req.params.token || req.headers['x-access-token'] || req.headers['authorization'] || req.headers['Authorization'];
+    const role_id = req.headers['role_id']
+    
     try {
         if (token) {
             try {
@@ -16,13 +19,13 @@ export const authenticateToken = async (req, res, next) => {
                         validAccess = true;
                     }
                 });
-    
+
                 if (validAccess) {
                     //ACCESS DETAILS
                     if (decoded.hasOwnProperty('id')) {
-                        const getTokenSessionById = async(user_id)=>{
-                        let query = `SELECT auth_token FROM profiles WHERE id = ${user_id}`
-                        return pool.query(query)
+                        const getTokenSessionById = async (user_id) => {
+                            let query = `SELECT auth_token FROM profiles WHERE id = ${user_id}`
+                            return pool.query(query)
                         }
                         [accessDetails] = await getTokenSessionById(decoded.id);
                         console.log('----------AUTH: USER ACCESS----------');
@@ -31,9 +34,8 @@ export const authenticateToken = async (req, res, next) => {
                     if (accessDetails != null) {
                         if (String(token) === String(accessDetails[0].auth_token)) {
                             req.decoded = decoded;
-                            const { role_id= 1113 } = req.body;
                             const getUserRole = async (array) => {
-                                const query = `SELECT ut.role_id, r.role_name
+                                const query = `SELECT ut.role_id, r.role_name, r.read_access, r.write_access, r.edit_access, r.delete_access
                                 FROM userteams AS ut
                                 INNER JOIN roles AS r ON ut.role_id = r._id
                                 WHERE ut.user_id = ? AND ut.role_id = ?
@@ -41,23 +43,35 @@ export const authenticateToken = async (req, res, next) => {
                                 LIMIT 1;`
                                 return pool.query(query, array);
                             }
-                            const [user_role] = await getUserRole([decoded.id, role_id]);
-                            if (user_role === 'coordinator') {
-                                next();
-                            } else if (user_role === 'staff_member') {
-                                if (req.method === 'DELETE') {
-                                    return await notFoundResponse(res, "", 'Access forbidden');
+                            let [user_role] = await getUserRole([decoded.id, role_id]);
+                            let read_access = user_role[0].read_access
+                            let write_access = user_role[0].write_access
+                            let edit_access = user_role[0].edit_access
+                            let delete_access = user_role[0].delete_access
+                            user_role = user_role[0].role_name
+
+                            const restrictedRoutes = [
+                                'add-transaction',
+                                'update-transaction',
+                                'delete-transaction',
+                                'fetch-transaction',
+                                'fetch-all-transaction',
+                                'fetch-outstanding-balance'
+                            ];
+
+                            const isRestrictedRoute = restrictedRoutes.some(route => req.path.includes(route))
+                            if ((req.method == 'GET' && read_access) ||
+                                (req.method == 'POST' && write_access) ||
+                                (req.method == 'DELETE' && delete_access) ||
+                                (req.method == 'PUT' && edit_access)) {
+                                if (user_role == "helper" && isRestrictedRoute) {
+                                    return await unAuthorizedResponse(res, "", 'Access forbidden', 403);
                                 }
-                                next();
-                            } else if (user_role === 'helper') {
-                                if (req.method === 'PUT' || req.method === 'DELETE') {
-                                    return await notFoundResponse(res, "", 'Access forbidden');
-                                }
-                                next();
+                                next()
                             } else {
-                                return await notFoundResponse(res, "", 'Access forbidden');
+                                return await unAuthorizedResponse(res, "", 'Access forbidden', 403);
                             }
-                        }else {
+                        } else {
                             return res.send({
                                 statusCode: 440,
                                 status: 'failure',

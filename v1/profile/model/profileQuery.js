@@ -34,9 +34,9 @@ export const insertTokenQuery = (array) => {
         throw error;
     }
 }
+
 export const getUserEventAndRoleDataQuery = (array) => {
     try {
-        array = [1111]
         let query = `SELECT e.id as event_id, e.event_name, ut.role_id, r.role_name
         FROM events e
         JOIN userEvents ue ON e.id = ue.event_id
@@ -50,6 +50,15 @@ export const getUserEventAndRoleDataQuery = (array) => {
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing getUserEventAndRoleDataQuery:", error);
+    }
+}
+
+export const getCoordinatorRole = () => {
+    try {
+        let query =  `SELECT _id as role_id, role_name FROM roles WHERE role_name = "coordinator"`
+        return pool.query(query);
+    } catch (error) {
+        
     }
 }
 
