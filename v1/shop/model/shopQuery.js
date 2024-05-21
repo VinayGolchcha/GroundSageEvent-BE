@@ -39,12 +39,12 @@ export const updateShopQuery = (query, array)=> {
     }
 }
 
-export const getAllShopsQuery = async() =>{
+export const getAllShopsByEventIdQuery = async(array) =>{
     try {
-        let query = `SELECT * FROM shops`
-        return pool.query(query);
+        let query = `SELECT * FROM shops WHERE event_id = ?`
+        return pool.query(query, array);
     } catch (error) {
-        console.error("Error executing getAllShopsQuery:", error);
+        console.error("Error executing getAllShopsByEventIdQuery:", error);
         throw error;
     }
 }
@@ -131,4 +131,9 @@ export const getShopOccupancyDetailsQuery = async(flag, array)=>{
         console.error("Error executing getShopOccupancyDetailsQuery:", error);
         throw err
     }
+}
+
+export const getLastActivityIdQuery = () =>{
+    let query = `SELECT id FROM shops ORDER BY id DESC LIMIT 1`
+    return pool.query(query);
 }

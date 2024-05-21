@@ -2,13 +2,25 @@ import pool from "../../../config/db.js"
 
 export const createEventQuery=(array) =>{
     try {
-        let query = `INSERT INTO events (event_name, event_description, start_date, end_date) VALUES(?,?,?,?)`
+        let query = `INSERT INTO events (event_name, event_description, start_date, end_date) VALUES(?,?,?,?);`
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing createEventQuery:", error);
         throw error;
     }
 }
+
+export const fetchLastEventQuery=() =>{
+    try {
+        let query = `SELECT id, event_name FROM events ORDER BY id DESC LIMIT 1`
+        return pool.query(query);
+    } catch (error) {
+        console.error("Error executing fetchLastEventQuery:", error);
+        throw error;
+    }
+}
+
+
 export const insertUserEventQuery=(array) =>{
     try {
         let query = `INSERT INTO userEvents (user_id, event_id) VALUES(?,?)`
@@ -68,9 +80,10 @@ export const updateEventQuery = (query, array)=> {
 export const getEventsByUserId = async (userId) => {
     try {
         let query = `
-            SELECT userEvents.user_id, events.*
+            SELECT userEvents.user_id, images.image_url, events.*
             FROM events 
             INNER JOIN userEvents ON events.id = userEvents.event_id 
+            LEFT JOIN images ON events.id = images.event_id
             WHERE userEvents.user_id = ?`;
 
         return pool.query(query,userId);

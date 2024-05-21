@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery} from "../model/profileQuery.js"
+import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery} from "../model/profileQuery.js"
 dotenv.config();
 
 
@@ -66,7 +66,19 @@ export const userLogin = async (req, res, next) => {
             expiresIn: process.env.JWT_EXPIRATION_TIME,
         });
         await insertTokenQuery([token, currentUser.id]);
-        return successResponse(res, [{ user_id: currentUser.id, user_name: currentUser.username + " " , is_email_verified: is_email_verified, token: token }], message);
+        const [user_event_data] = await getUserEventAndRoleDataQuery([currentUser.id]);
+        const { event_id = "", event_name = "", role_id = "", role_name = "" } = user_event_data[0] || {};
+        return successResponse(res, [{
+            user_id: currentUser.id,
+            user_name: currentUser.username,
+            is_email_verified: is_email_verified,
+            token: token,
+            event_id: event_id,
+            event_name: event_name,
+            role_id: role_id,
+            role_name: role_name
+        }],
+            message);
     } catch (error) {
         next(error);
     }
