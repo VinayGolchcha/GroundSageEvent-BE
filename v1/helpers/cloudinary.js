@@ -2,9 +2,9 @@ import { config } from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({ 
-    cloud_name: 'dgxsbazvx', 
-    api_key: '367566542868935', 
-    api_secret: 'mtVbCzGPRaHfF_oJR74baWgymX0' 
+    cloud_name: process.env.CLOUDINARY_CLOUDNAME, 
+    api_key:  process.env.CLOUDINARY_API_KEY, 
+    api_secret:  process.env.CLOUDINARY_API_SECRET 
   });
 
 export const uploadImageToCloud = (imageBuffer) => {
