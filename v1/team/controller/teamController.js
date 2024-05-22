@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
-import { addTeamQuery, fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery, fetchUserTeamQuery, getUserEventTeamQuery } from "../model/teamQuery.js";
+import { addTeamQuery, fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery } from "../model/teamQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
