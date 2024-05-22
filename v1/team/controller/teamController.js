@@ -75,37 +75,3 @@ export const updateTeam = async (req, res, next) => {
 //     next(error);
 //   }
 // }
-
-export const getUserEventTeamCount = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "");
-    }
-    const { user_id } = req.body;
-    const [data] = await getUserEventTeamQuery([user_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    return successResponse(res, data, "list of event and team fetched successfully");
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const fetchUserTeams = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "");
-    }
-    const { event_id } = req.body;
-    const [data] = await fetchUserTeamQuery([event_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    return successResponse(res, data, "User teams fetched successfully.");
-  } catch (error) {
-    next(error);
-  }
-};

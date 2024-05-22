@@ -223,3 +223,7 @@ export const fetchOutstandingBalanceForIncomeAndExpenseVal = [
     body('type').notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
 ]
+
+export const homePageIdVal = [
+    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
+]
