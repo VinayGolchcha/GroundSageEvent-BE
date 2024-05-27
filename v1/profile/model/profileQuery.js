@@ -171,8 +171,14 @@ export const getUserAboutPageDetailsQuery = async(array)=>{
             team_name,
             event_id,
             event_name,
-            role_id,
-            role_name
+            CASE 
+            WHEN role_id IS NULL THEN (SELECT _id FROM roles WHERE role_name = 'coordinator' LIMIT 1)
+            ELSE role_id
+        END AS role_id,
+        CASE 
+            WHEN role_name IS NULL THEN 'coordinator'
+            ELSE role_name
+        END AS role_name
         FROM LatestEntries
         WHERE row_num = 1 and id = ?`
         return pool.query(query, array);
