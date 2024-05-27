@@ -12,24 +12,26 @@ export const createNote= async (req, res, next) => {
     }
     try {
       const {event_id,user_id,notes_heading,notes_description,date} = req.body;
-      await createNoteQuery([event_id,user_id,notes_heading,notes_description,date]);
-      return successResponse(res, "", "Notes successfully created");
+      const [data] = await createNoteQuery([event_id,user_id,notes_heading,notes_description,date]);
+      return successResponse(res, {note_id:data.insertId}, "Notes successfully created");
     } catch (error) {
       next(error);
     }
   };
 
-export const fetchNotes = async (req, res, next) => {
+export const fetchNotesById = async (req, res, next) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-     const [data] = await fetchNoteQuery();
+    const user_id = req.params.id
+    const event_id = req.params.event_id
+     const [data] = await fetchNoteQuery([event_id, user_id]);
     if (data.length == 0) {
-      return errorResponse(res, "", "Data not found.");
+      return notFoundResponse(res, "", "Data not found.");
     }
-    return await successResponse(res, data, "Notes data view successfully");
+    return await successResponse(res, data, "Notes data fetched successfully");
   } catch (error) {
     next(error);
   }
