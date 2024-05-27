@@ -36,7 +36,7 @@ export const authenticateToken = async (req, res, next) => {
                             req.decoded = decoded;
                             const getUserRole = async (array) => {
                                 const query = `SELECT ut.role_id, r.role_name, r.read_access, r.write_access, r.edit_access, r.delete_access
-                                FROM userteams AS ut
+                                FROM userTeams AS ut
                                 INNER JOIN roles AS r ON ut.role_id = r._id
                                 WHERE ut.user_id = ? AND ut.role_id = ?
                                 ORDER BY ut.created_at DESC
