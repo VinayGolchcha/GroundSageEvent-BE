@@ -80,11 +80,21 @@ export const updateEventQuery = (query, array)=> {
 export const getEventsByUserId = async (userId) => {
     try {
         let query = `
-            SELECT userEvents.user_id, images.image_url, events.*
-            FROM events 
-            INNER JOIN userEvents ON events.id = userEvents.event_id 
-            LEFT JOIN images ON events.id = images.event_id
-            WHERE userEvents.user_id = ?`;
+                SELECT 
+                userEvents.user_id, 
+                images.image_url, 
+                images.original_filename, 
+                images.public_id, 
+                events.*
+            FROM 
+                events 
+            INNER JOIN 
+                userEvents ON events.id = userEvents.event_id 
+            LEFT JOIN 
+                images ON events.id = images.event_id
+            WHERE 
+                userEvents.user_id = ?;
+    `;
 
         return pool.query(query,userId);
     } catch (error) {
