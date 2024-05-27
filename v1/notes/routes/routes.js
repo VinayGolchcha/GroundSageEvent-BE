@@ -1,15 +1,14 @@
 import express, { Router } from 'express';
 const app = express()
 const router = Router();
-import authenticateToken from '../../../middlewares/auth.js';
-import {createNote,updateNote,deleteNote,fetchNotes} from '../controller/noteController.js';
-import {createNoteVal,updateNoteVal,deleteNoteVal} from '../../../utils/validation.js';
-router.use(authenticateToken);
+import {authenticateToken} from '../../../middlewares/roleAuth.js';
+import {createNote,updateNote,deleteNote,fetchNotesById} from '../controller/noteController.js';
+import {createNoteVal,updateNoteVal, deleteNoteVal, fetchNoteVal} from '../../../utils/validation.js';
 
-app.post('/create-note',createNoteVal, createNote);
-app.put('/update-note/:id',updateNoteVal,updateNote);
-app.delete('/delete-note/:id',deleteNoteVal, deleteNote);
-app.get('/fetch-notes', fetchNotes);
+app.post('/create-note',authenticateToken,createNoteVal, createNote);
+app.put('/update-note/:id',authenticateToken,updateNoteVal,updateNote);
+app.delete('/delete-note',authenticateToken,deleteNoteVal, deleteNote);
+app.get('/fetch-notes/:id/:event_id',fetchNoteVal,authenticateToken, fetchNotesById);
 
 app.use("/", router);
 

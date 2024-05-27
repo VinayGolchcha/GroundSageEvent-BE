@@ -52,8 +52,8 @@ export const fetchRole = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const _id  = req.params.id;
-    const [data] = await fetchRolesQuery(_id);
+    const id  = req.params.id;
+    const [data] = await fetchRoleQuery([id]);
     if (data.length == 0) {
       return errorResponse(res, "", "Data not found.");
     }
@@ -71,7 +71,7 @@ export const updateRole= async (req, res, next) => {
     }
     const req_data = req.body;
     const id = req.params.id;
-    const [data] = await fetchRolesQuery(id);
+    const [data] = await fetchRoleQuery([id]);
     if (data.length == 0) {
       return errorResponse(res, "", "Data not found.");
     }
@@ -79,7 +79,7 @@ export const updateRole= async (req, res, next) => {
       _id: id,
     };
     const query_values = await createDynamicUpdateQuery("roles", condition, req_data);
-    await updateRolesQuery(query_values.updateQuery, query_values.updateValues);
+    await updateRoleQuery(query_values.updateQuery, query_values.updateValues);
     return successResponse(res, "Role updated successfully");
   } catch (error) {
     next(error);

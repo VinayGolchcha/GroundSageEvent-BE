@@ -54,9 +54,9 @@ export const fetchOutstandingBalanceForIncomeAndExpenseQuery = (event_id, tag, f
             if(tag == "income"){
                 query = `SELECT 
                 YEAR(created_at) AS year,
-                SUM(entered_amount) AS total,
-                SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
-                SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                SUM(outstanding_amount) AS total,
+                SUM(CASE WHEN type = 'shop rental' THEN outstanding_amount ELSE 0 END) AS shop_rental_total,
+                SUM(CASE WHEN type = 'others' THEN outstanding_amount ELSE 0 END) AS other_total
             FROM transactions
             WHERE 
                 event_id = ? 
@@ -67,9 +67,9 @@ export const fetchOutstandingBalanceForIncomeAndExpenseQuery = (event_id, tag, f
             if(tag == "expense"){
                 query = `SELECT 
                 YEAR(created_at) AS year,
-                SUM(entered_amount) AS total,
-                SUM(CASE WHEN type = 'staff salary' THEN entered_amount ELSE 0 END) AS staff_salary_total,
-                SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                SUM(outstanding_amount) AS total,
+                SUM(CASE WHEN type = 'staff salary' THEN outstanding_amount ELSE 0 END) AS staff_salary_total,
+                SUM(CASE WHEN type = 'others' THEN outstanding_amount ELSE 0 END) AS other_total
             FROM transactions
             WHERE 
                 event_id = ? 
@@ -88,9 +88,9 @@ export const fetchOutstandingBalanceForIncomeAndExpenseQuery = (event_id, tag, f
             FROM (
                 SELECT 
                     DATE_FORMAT(created_at, '%Y-%m-01') AS month_year,
-                    SUM(entered_amount) AS total,
-                    SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
-                    SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                    SUM(outstanding_amount) AS total,
+                    SUM(CASE WHEN type = 'shop rental' THEN outstanding_amount ELSE 0 END) AS shop_rental_total,
+                    SUM(CASE WHEN type = 'others' THEN outstanding_amount ELSE 0 END) AS other_total
                 FROM transactions
                 WHERE 
                     event_id = ?
@@ -111,9 +111,9 @@ export const fetchOutstandingBalanceForIncomeAndExpenseQuery = (event_id, tag, f
             FROM (
                 SELECT 
                     DATE_FORMAT(created_at, '%Y-%m-01') AS month_year,
-                    SUM(entered_amount) AS total,
-                    SUM(CASE WHEN type = 'staff salary' THEN entered_amount ELSE 0 END) AS staff_salary_total,
-                    SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
+                    SUM(outstanding_amount) AS total,
+                    SUM(CASE WHEN type = 'staff salary' THEN outstanding_amount ELSE 0 END) AS staff_salary_total,
+                    SUM(CASE WHEN type = 'others' THEN outstanding_amount ELSE 0 END) AS other_total
                 FROM transactions
                 WHERE 
                     event_id = ?

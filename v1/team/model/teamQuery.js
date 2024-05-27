@@ -11,7 +11,7 @@ export const addTeamQuery = (array) => {
 }
 export const fetchAllTeamsQuery = () => {
     try {
-        let query = `SELECT team_id, team_name, team_size FROM teams`
+        let query = `SELECT id, team_name, team_size FROM teams`
         return pool.query(query);
     } catch (error) {
         console.error("Error executing fetchAllTeamQuery:", error);
@@ -57,40 +57,3 @@ export const updateTeamQuery = (query, array) => {
         throw error;
     }
 }
-
-export const fetchUsersAndTeamsQuery = (array) =>{
-    try{
-        let query = `SELECT team_id,team_name,event_id,username
-        FROM userteams
-        INNER JOIN teams ON userteams.team_id= teams.id
-        INNER JOIN profiles ON userteams.user_id =profiles.id
-        WHERE teams.event_id =?;`
-        return pool.query(query, array);
-    } catch (error) {
-        console.error("Error executing fetchUsersAndTeamQuery:",error);
-        throw error;
-    }
-    }
-
-    export const getTotalTeamsAndEventsQuery = (array) =>{
-        try{
-            let query = `SELECT
-            COUNT(DISTINCT teams.id) AS team_count,
-            COUNT(DISTINCT teams.event_id) AS event_count,
-            username,user_id
-        FROM
-            userTeams
-        INNER JOIN
-            teams ON userTeams.team_id = teams.id
-        INNER JOIN
-            profiles ON userteams.user_id = profiles.id
-        WHERE
-            userTeams.user_id = ?`;
-            return pool.query(query ,array);
-        }catch (error){
-            console.error("Error executing getTotalTeamsAndeventsQuery : ",error);
-            throw(error);
-        }
-    }
-    
-    

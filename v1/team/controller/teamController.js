@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
-import {  fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery ,getTotalTeamsAndEventsQuery,fetchUsersAndTeamsQuery} from "../model/teamQuery.js";
+import { addTeamQuery, fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery } from "../model/teamQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
@@ -23,8 +23,8 @@ export const fetchTeam = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { team_id } = req.body;
-    const [data] = await fetchTeamQuery([team_id]);
+    const { id } = req.body;
+    const [data] = await fetchTeamQuery([id]);
     if (data.length == 0) {
       return errorResponse(res, "", "Data not found.");
     }
@@ -57,54 +57,20 @@ export const updateTeam = async (req, res, next) => {
   }
 }
 
-export const deleteTeam = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "")
-    }
-    const { team_id } = req.body;
-    const [data] = await fetchTeamQuery([team_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    await deleteTeamQuery([team_id]);
-    return successResponse(res, "", 'Team deleted successfully');
-  } catch (error) {
-    next(error);
-  }
-}
-
-export const fetchUsersAndTeams = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "");
-    }
-    const { event_id } = req.body;
-     const[data]=await fetchUsersAndTeamsQuery([event_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    return successResponse(res, data, "User and teams fetched successfully.");
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getTotalTeamsAndEvents = async (req, res, next) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return errorResponse(res, errors.array(), "");
-    }
-    const { user_id } = req.body;
-    const [data] = await getTotalTeamsAndEventsQuery([user_id]);
-    if (data.length == 0) {
-      return errorResponse(res, '', 'Data not found.');
-    }
-    return successResponse(res, data, "Total of teams and events fetched successfully.");
-  } catch (error) {
-    next(error);
-  }
-};
+// export const deleteTeam = async (req, res, next) => {
+//   try {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return errorResponse(res, errors.array(), "")
+//     }
+//     const { id } = req.body;
+//     const [data] = await fetchTeamQuery([id]);
+//     if (data.length == 0) {
+//       return errorResponse(res, '', 'Data not found.');
+//     }
+//     await deleteTeamQuery([id]);
+//     return successResponse(res, "", 'Team deleted successfully');
+//   } catch (error) {
+//     next(error);
+//   }
+// }

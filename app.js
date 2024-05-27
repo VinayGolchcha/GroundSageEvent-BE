@@ -11,7 +11,7 @@ import shopRoutes from './v1/shop/routes/routes.js'
 import transactionRoutes from './v1/transactions/routes/routes.js'
 import rentalAgreementRoutes from './v1/rentalAgreement/routes/routes.js';
 import noteRoutes from './v1/notes/routes/routes.js';
-
+import homeRoutes from './v1/home/routes/routes.js';
 const app = express();
 config();
 app.use(json());
@@ -27,10 +27,11 @@ app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/transaction', transactionRoutes);
 app.use('/api/v1/rentalAgreement', rentalAgreementRoutes);
 app.use('/api/v1/note',noteRoutes);
-app.use('/api/v1/rentalagreement',rentalAgreementRoutes);
+app.use('/api/v1/rentalagreement', rentalAgreementRoutes);
+app.use('/api/v1/home', homeRoutes);
 
 app.use('/', (req, res) => {
-  res.send("Hey, I'm online now!!")
+  res.send("Invalid API")
 });
 
 // Start the server

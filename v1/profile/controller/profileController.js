@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery} from "../model/profileQuery.js"
+import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getCoordinatorRole, getUserAboutPageDetailsQuery, updateUsernameQuery} from "../model/profileQuery.js"
 dotenv.config();
 
 
@@ -66,7 +66,20 @@ export const userLogin = async (req, res, next) => {
             expiresIn: process.env.JWT_EXPIRATION_TIME,
         });
         await insertTokenQuery([token, currentUser.id]);
-        return successResponse(res, [{ user_id: currentUser.id, user_name: currentUser.username + " " , is_email_verified: is_email_verified, token: token }], message);
+        const [user_event_data] = await getUserEventAndRoleDataQuery([currentUser.id]);
+        const [default_role] = await getCoordinatorRole()
+        const { event_id = "", event_name = "", role_id = default_role[0].role_id, role_name = default_role[0].role_name } = user_event_data[0] || {};
+        return successResponse(res, [{
+            user_id: currentUser.id,
+            user_name: currentUser.username,
+            is_email_verified: is_email_verified,
+            token: token,
+            event_id: event_id,
+            event_name: event_name,
+            role_id: role_id,
+            role_name: role_name
+        }],
+            message);
     } catch (error) {
         next(error);
     }
@@ -219,6 +232,26 @@ export const getUserEventAndTeamCount = async(req, res, next) => {
             return notFoundResponse(res, '', 'Data not found');
         }
         return successResponse(res, {count, members:members}, 'Events and teams count fetched successfully.')
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getAboutPageDetails = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {user_id, username} = req.body;
+        if(username){
+            await updateUsernameQuery([username, user_id]);
+        }
+        const [user_data] = await getUserAboutPageDetailsQuery([user_id])
+        if (user_data.length == 0) {
+            return notFoundResponse(res, '', 'Data not found');
+        }
+        return successResponse(res, user_data, 'User about page data fetched successfully.')
     } catch (error) {
         next(error);
     }

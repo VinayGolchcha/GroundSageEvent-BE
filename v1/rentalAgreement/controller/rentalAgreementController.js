@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
-import { addRentalAndTenantAgreementQuery, fetchRentalAgreementQuery, editRentalAgreementQuery, deleteRentalAgreementQuery } from "../model/rentalAgreementQuery.js";
+import { addRentalAndTenantAgreementQuery, fetchRentalAgreementQuery, editRentalAgreementQuery, deleteRentalAgreementQuery, addTenantQuery, checkShopExistsQuery, uploadFilesQuery } from "../model/rentalAgreementQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
@@ -11,11 +11,24 @@ export const addRentalAndTenantAgreement = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { name, email, phone_number, address, id_document,_id, shop_id, tenant_id, start_date, end_date, rent_amount, rent_mode, event_id} = req.body;
+    const file = req.file;
+    const { name, email, phone_number, address, id_document, shop_id, start_date, end_date, rent_amount, rent_mode, event_id} = req.body;
     const array1 = [name, email, phone_number, address, id_document];
-    const array2 = [shop_id, '', start_date, end_date, rent_amount, rent_mode, event_id];  
-    await addRentalAndTenantAgreementQuery(array1,array2);
-    return successResponse(res,"Rental And Tenant Agreement successfully registered" );
+    const [shop_data] = await checkShopExistsQuery([shop_id])
+    if(shop_data[0].count==0){
+      return notFoundResponse(res, "", "Shop with this id doesn't exists.");
+    }
+
+    const [data] = await addTenantQuery(array1);
+    let tenant_id = data.insertId;
+    const array2 = [shop_id, tenant_id, start_date, end_date, rent_amount, rent_mode, event_id]; 
+    const [agreement_data] = await addRentalAndTenantAgreementQuery(array2);
+
+    const file_buffer = file.buffer
+    const file_name = file.originalname
+    await uploadFilesQuery([file_name, tenant_id, agreement_data.insertId, file_buffer])
+
+    return successResponse(res,{id:agreement_data.insertId},"Rental And Tenant Agreement successfully registered" );
   } catch (error) {
     next(error);
   }

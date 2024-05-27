@@ -2,17 +2,14 @@ import express, { Router } from 'express';
 const app = express()
 const router = Router();
 
-import authenticateToken from '../../../middlewares/auth.js';
-import {updateTeam, deleteTeam, fetchAllTeams, fetchTeam,fetchUsersAndTeams,getTotalTeamsAndEvents} from '../controller/teamController.js';
-import {updateTeamVal, deleteTeamVal, fetchTeamVal} from '../../../utils/validation.js';
-router.use(authenticateToken);
+import {authenticateToken} from '../../../middlewares/roleAuth.js';
+import {updateTeam, fetchAllTeams, fetchTeam} from '../controller/teamController.js';
 
-app.put('/update-team/:id',updateTeamVal, updateTeam);
-app.delete('/delete-team',deleteTeamVal, deleteTeam);
-app.get('/fetch-team',fetchTeamVal, fetchTeam);
-app.get('/fetch-all-team', fetchAllTeams);   
-app.post('/get-total-teams-events' ,getTotalTeamsAndEvents );
-app.post('/fetch-user-teams' ,fetchUsersAndTeams); 
+import {updateTeamVal, fetchTeamVal} from '../../../utils/validation.js';
+
+app.put('/update-team/:id',authenticateToken, updateTeamVal, updateTeam);
+app.post('/fetch-team',authenticateToken, fetchTeamVal, fetchTeam);
+app.get('/fetch-all-team',authenticateToken, fetchAllTeams);
 
 app.use("/", router);
 

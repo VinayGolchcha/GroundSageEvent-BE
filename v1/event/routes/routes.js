@@ -1,18 +1,18 @@
 import express, { Router } from 'express';
 const app = express()
 const router = Router();
+import multer from 'multer';
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-import authenticateToken from '../../../middlewares/auth.js';
-import {createEventTeamAndReferralCode, getAllEvents, updateEvent, deleteEvent, joinUserTeamWithReferralCode} from '../controller/eventController.js';
-import {createEventVal, updateEventVal, deleteEventVal, joinEventTeamVal} from '../../../utils/validation.js';
-router.use(authenticateToken)
+import {authenticateToken} from '../../../middlewares/roleAuth.js';
+import {createEventTeamAndReferralCode, getAllUserEvents, updateEvent, joinUserTeamWithReferralCode} from '../controller/eventController.js';
+import {createEventVal, updateEventVal, joinEventTeamVal} from '../../../utils/validation.js';
 
-app.post('/create-event-team-and-referral-code',createEventVal, createEventTeamAndReferralCode);
-app.post('/update-event/:id',updateEventVal, updateEvent);
-app.get('/get-all-event', getAllEvents);
-app.delete('/delete-event/:id',deleteEventVal, deleteEvent);
-app.post('/join-team-with-referral-code', joinEventTeamVal, joinUserTeamWithReferralCode);
+app.post('/create-event-team-and-referral-code',authenticateToken, upload.array('files', 2), createEventVal, createEventTeamAndReferralCode);
+app.post('/update-event/:id',authenticateToken, upload.array('files', 1), updateEventVal, updateEvent);
+app.get('/get-all-user-event/:id',authenticateToken, getAllUserEvents);
+app.post('/join-team-with-referral-code',authenticateToken, joinEventTeamVal, joinUserTeamWithReferralCode);
 
 app.use("/", router);
-
 export default app;
