@@ -1,7 +1,7 @@
 {
-  "name": "dental_backend",
+  "name": "Ground Sage",
   "version": "1.0.0",
-  "description": "An insightful canvas app for easing the counselling of the doctors.",
+  "description": "Event management application.",
   "type": "module",
   "scripts": {
     "start": "node app.js"
