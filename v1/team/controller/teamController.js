@@ -57,7 +57,6 @@ export const updateTeam = async (req, res, next) => {
   }
 }
 
-
 // export const deleteTeam = async (req, res, next) => {
 //   try {
 //     const errors = validationResult(req);

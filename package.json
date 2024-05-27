@@ -1,7 +1,7 @@
 {
-  "name": "dental_backend",
+  "name": "Ground Sage",
   "version": "1.0.0",
-  "description": "",
+  "description": "Event management application.",
   "type": "module",
   "scripts": {
     "start": "node app.js"
@@ -22,5 +22,6 @@
     "nodemon": "^3.0.3"
   },
   "main": "app.js",
-  "keywords": []
+  "keywords": [],
+  "devDependencies": {}
 }

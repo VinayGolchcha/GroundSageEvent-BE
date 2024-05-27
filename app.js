@@ -25,10 +25,10 @@ app.use('/api/v1/event', eventRoutes);
 app.use('/api/v1/role', roleRoutes);
 app.use('/api/v1/shop', shopRoutes);
 app.use('/api/v1/transaction', transactionRoutes);
+app.use('/api/v1/rentalAgreement', rentalAgreementRoutes);
 app.use('/api/v1/note',noteRoutes);
 app.use('/api/v1/rentalagreement', rentalAgreementRoutes);
 app.use('/api/v1/home', homeRoutes);
-
 
 app.use('/', (req, res) => {
   res.send("Invalid API")
