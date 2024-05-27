@@ -208,9 +208,17 @@ export const deleteRolesVal = [
     body('notes_heading').optional().isString().withMessage('Invalid note heading input.').notEmpty().withMessage(' note heading cannot be empty.'),
     body('notes_description').optional().isString().withMessage('Invalid note description input.').notEmpty().withMessage(' note description cannot be empty.')
 ]
+ export const fetchNoteVal =[
+    param('id').isInt().withMessage('Invalid note id input.').notEmpty().withMessage('  id cannot be empty.'),
+    param('event_id').isInt().withMessage('Invalid event_id input.').notEmpty().withMessage('event_id cannot be empty.'),
+]
 
  export const getCurrentEventTeamUserIdVal = [
     body('user_id').notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input.")
+ ]
+ export const getUserAboutPageVal = [
+    body('user_id').notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input."),
+    body('username').optional().notEmpty().withMessage('user id cannot be empty.').isInt().withMessage("Invalid user id input.")
  ]
 
 export const getShopOccupancyDetailsVal = [
@@ -222,4 +230,8 @@ export const fetchOutstandingBalanceForIncomeAndExpenseVal = [
     body('flag').notEmpty().withMessage('flag cannot be empty.').isString().withMessage("Invalid flag input."),
     body('type').notEmpty().withMessage('type cannot be empty.').isString().withMessage("Invalid type input."),
     body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
+]
+
+export const homePageIdVal = [
+    param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
 ]

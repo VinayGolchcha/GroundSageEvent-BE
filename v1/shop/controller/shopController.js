@@ -48,7 +48,7 @@ export const getLastShopNumber =  async (req, res, next) => {
         }else{
             shop_number = shop_data[0].shop_number + 1
         }
-        return successResponse(res, {shop_number: shop_number} ,'Shop created successfully.');
+        return successResponse(res, {shop_number: shop_number} ,`New shop number ${shop_number} created.`);
     } catch (error) {
         next(error);
     }
@@ -76,6 +76,7 @@ export const updateShop = async(req, res, next) => {
         }
         
         delete req_data.public_ids;
+        delete req_data.files;
         let table = 'shops';
 
         const condition = {

@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getCoordinatorRole} from "../model/profileQuery.js"
+import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getCoordinatorRole, getUserAboutPageDetailsQuery, updateUsernameQuery} from "../model/profileQuery.js"
 dotenv.config();
 
 
@@ -232,6 +232,26 @@ export const getUserEventAndTeamCount = async(req, res, next) => {
             return notFoundResponse(res, '', 'Data not found');
         }
         return successResponse(res, {count, members:members}, 'Events and teams count fetched successfully.')
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getAboutPageDetails = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return errorResponse(res, errors.array(), "")
+        }
+        const {user_id, username} = req.body;
+        if(username){
+            await updateUsernameQuery([username, user_id]);
+        }
+        const [user_data] = await getUserAboutPageDetailsQuery([user_id])
+        if (user_data.length == 0) {
+            return notFoundResponse(res, '', 'Data not found');
+        }
+        return successResponse(res, user_data, 'User about page data fetched successfully.')
     } catch (error) {
         next(error);
     }
