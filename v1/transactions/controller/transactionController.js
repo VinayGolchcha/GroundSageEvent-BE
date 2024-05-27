@@ -145,3 +145,19 @@ export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next)
     }
   };
 
+export const fetchTenantsReportData= async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+        return errorResponse(res, errors.array(), "");
+        }
+        const { event_id,from_date,to_date} = req.body;
+        const [data] = await fetchTenantsReportDataQuery([event_id,from_date,to_date]);
+        if (data.length == 0) {
+        return notFoundResponse(res, "", "Data not found.");
+        }
+        return await successResponse(res, data, "Tenants data fetched successfully");
+    } catch (error) {
+        next(error);
+    }
+}
