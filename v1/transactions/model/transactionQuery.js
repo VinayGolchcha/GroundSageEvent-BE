@@ -135,17 +135,32 @@ export const fetchOutstandingBalanceForIncomeAndExpenseQuery = (event_id, tag, f
 
 export const fetchYearlyDataQuery = async(array) => {
     try{
-        let query =`SELECT 
-        YEAR(created_at) AS year,
-        SUM(entered_amount) AS total,
-        SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
-        SUM(CASE WHEN type != 'shop rental' THEN entered_amount ELSE 0 END) AS others_total
-    FROM 
-        transactions
-    WHERE 
-        YEAR(created_at) = ? AND tag = 
-    GROUP BY 
-        YEAR(created_at);`
+        let query;
+        if(array[1]=="income"){
+            query =`SELECT 
+            YEAR(created_at) AS year,
+            SUM(entered_amount) AS total,
+            SUM(CASE WHEN type = 'shop rental' THEN entered_amount ELSE 0 END) AS shop_rental_total,
+            SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS others_total
+        FROM 
+            transactions
+        WHERE 
+            YEAR(created_at) = ? AND tag = ? AND event_id = ?
+        GROUP BY 
+            YEAR(created_at);`
+        }else{
+            query =`SELECT 
+            YEAR(created_at) AS year,
+            SUM(entered_amount) AS total,
+            SUM(CASE WHEN type = 'staff salary' THEN entered_amount ELSE 0 END) AS staff_salary_total,
+            SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS others_total
+        FROM 
+            transactions
+        WHERE 
+            YEAR(created_at) = ? AND tag = ? AND event_id = ?
+        GROUP BY 
+            YEAR(created_at);`
+        }
     return await pool.query(query, array);
 } catch (error) {
     console.error("Error executing fetchYearlyDataQuery:", error);
@@ -156,6 +171,8 @@ export const fetchYearlyDataQuery = async(array) => {
 export const fetchAllYearsDataQuery = async (event_id, tag, flag) => {
     try {
         let query;
+        const params = [event_id];
+
         if (flag === "year") {
             if (tag === "income") {
                 query = `
@@ -166,7 +183,7 @@ export const fetchAllYearsDataQuery = async (event_id, tag, flag) => {
                         SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
                     FROM transactions
                     WHERE 
-                        event_id = ? 
+                        event_id = ?
                         AND tag = 'income'
                     GROUP BY YEAR(created_at)
                     ORDER BY YEAR(created_at) ASC;
@@ -180,7 +197,7 @@ export const fetchAllYearsDataQuery = async (event_id, tag, flag) => {
                         SUM(CASE WHEN type = 'others' THEN entered_amount ELSE 0 END) AS other_total
                     FROM transactions
                     WHERE 
-                        event_id = ? 
+                        event_id = ?
                         AND tag = 'expense'
                     GROUP BY YEAR(created_at)
                     ORDER BY YEAR(created_at) ASC;
@@ -208,9 +225,10 @@ export const fetchAllYearsDataQuery = async (event_id, tag, flag) => {
                             AND created_at <= LAST_DAY(CURRENT_DATE())
                         GROUP BY month_year
                     ) AS subquery
-                    GROUP BY month_year
-                    ORDER BY month_year ASC;
+                    GROUP BY month
+                    ORDER BY month ASC;
                 `;
+                params.push(event_id);
             } else if (tag === "expense") {
                 query = `
                     SELECT 
@@ -232,19 +250,18 @@ export const fetchAllYearsDataQuery = async (event_id, tag, flag) => {
                             AND created_at <= LAST_DAY(CURRENT_DATE())
                         GROUP BY month_year
                     ) AS subquery
-                    GROUP BY month_year
-                    ORDER BY month_year ASC;
+                    GROUP BY month
+                    ORDER BY month ASC;
                 `;
+                params.push(event_id);
             }
         }
-        return pool.query(query, [event_id]);
+        return pool.query(query, params);
     } catch (error) {
         console.error("Error executing fetchAllYearsDataQuery:", error);
         throw error;
     }
 }
-
-
 
 export const fetchTenantsReportDataQuery = (array) => {
     try {

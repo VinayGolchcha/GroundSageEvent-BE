@@ -104,7 +104,7 @@ export const fetchYearlyData = async (req, res, next) => {
         if (data.length==0) {
             return errorResponse(res, '', 'Data not found.');
         }
-        return successResponse(res, data, 'Yearly data fetched successfully');
+        return successResponse(res, data[0], 'Yearly data fetched successfully');
     } catch (error) {
         next(error);
     }
@@ -117,12 +117,11 @@ export const fetchAllYearsData = async (req, res, next) => {
             return errorResponse(res, errors.array(), "");
         }
         const { flag, type, event_id } = req.body;
-        const [data] = await fetchAllYearsDataQuery([event_id, type, flag]);
+        const [data] = await fetchAllYearsDataQuery(event_id, type, flag);
         if (data.length === 0) {
-            return errorResponse(res, "", "Data not found.");
+            return notFoundResponse(res, "", "Data not found.");
         }
-        res.json(data);
-        return successResponse(res, data, 'fetch all yeara data successfull');
+        return successResponse(res, data, 'Fetch all year data successful');
     } catch (error) {
         next(error);
     }
