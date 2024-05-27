@@ -59,3 +59,14 @@ export const deleteRentalAgreementQuery = async (_id) => {
     throw error;
   }
 };
+
+export const uploadFilesQuery = async(array)=>{
+  try {
+      console.log("array", array);
+      let query = `INSERT INTO documents (file_name, tenant_id, rental_agreement_id, buffer) VALUES (?,?,?,?)`;
+      return await pool.query(query, array);
+  } catch (error) {
+      console.error("Error executing uploadFilesQuery:", error);
+      throw error;
+  }
+}
