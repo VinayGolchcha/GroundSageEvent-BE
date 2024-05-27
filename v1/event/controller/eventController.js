@@ -94,6 +94,7 @@ export const updateEvent = async (req, res, next) => {
         }
 
         delete req_data.public_ids;
+        delete req_data.files;
         let table = 'events';
 
         const condition = {
