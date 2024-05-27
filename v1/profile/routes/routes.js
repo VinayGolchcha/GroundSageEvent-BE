@@ -3,8 +3,8 @@ const app = express()
 const router = Router();
 
 import authenticateToken from '../../../middlewares/auth.js';
-import {userLogin, userRegistration, updateUserPassword, userLogout, sendOtpForEmailVerification, verifyEmail, checkEmailVerification, getCurrentEventTeamAndRoleBasedOnUserId, getAllEventsBasedOnUserId, getUserEventAndTeamCount} from '../controller/profileController.js';
-import {register, login, updatePassword, sendOtp, verifyOtp, getCurrentEventTeamUserIdVal} from '../../../utils/validation.js';
+import {userLogin, userRegistration, updateUserPassword, userLogout, sendOtpForEmailVerification, verifyEmail, checkEmailVerification, getCurrentEventTeamAndRoleBasedOnUserId, getAllEventsBasedOnUserId, getUserEventAndTeamCount, getAboutPageDetails} from '../controller/profileController.js';
+import {register, login, updatePassword, sendOtp, verifyOtp, getCurrentEventTeamUserIdVal, getUserAboutPageVal} from '../../../utils/validation.js';
 router.use(authenticateToken)
 
 app.post('/login', login, userLogin);
@@ -16,7 +16,7 @@ app.post('/check-email-verification', sendOtp, checkEmailVerification)
 app.post('/get-user-current-team-event-data',getCurrentEventTeamUserIdVal, getCurrentEventTeamAndRoleBasedOnUserId)
 app.post('/get-all-user-events',getCurrentEventTeamUserIdVal, getAllEventsBasedOnUserId)
 app.post('/get-user-event-and-team-count',getCurrentEventTeamUserIdVal, getUserEventAndTeamCount)
-
+app.post('/get-user-about-page-data',getUserAboutPageVal, getAboutPageDetails)
 router.get('/logout/:id', userLogout);
 
 app.use("/", router);

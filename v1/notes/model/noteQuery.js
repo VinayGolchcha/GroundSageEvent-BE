@@ -10,10 +10,10 @@ export const createNoteQuery = (array) => {
   }
 };
 
-export const fetchNoteQuery = () => {
+export const fetchNoteQuery = (array) => {
   try {
-    let query = `SELECT * FROM notes ORDER BY created_at DESC`;
-    return pool.query(query);
+  let query = `SELECT * FROM notes WHERE event_id =? AND user_id =? ORDER BY created_at DESC`;
+    return pool.query(query, array);
   } catch (error) {
     console.error("Error executing viewNoteQuery:", error);
     throw error;

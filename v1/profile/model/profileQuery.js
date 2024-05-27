@@ -142,6 +142,55 @@ export const getUserEventAndTeamCountQuery = async(array)=>{
         throw error
     }
 }
+export const getUserAboutPageDetailsQuery = async(array)=>{
+    try {
+        let query = `
+        WITH LatestEntries AS (
+            SELECT 
+                p.id,
+                p.username,
+                p.email,
+                t.id as team_id,
+                t.team_name,
+                e.id as event_id,
+                e.event_name,
+                r._id as role_id,
+                r.role_name,
+                ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY ut.created_at DESC) AS row_num
+            FROM profiles AS p
+            LEFT JOIN userteams ut ON ut.user_id = p.id
+            LEFT JOIN teams t ON t.id = ut.team_id
+            LEFT JOIN events e ON e.id = t.event_id
+            LEFT JOIN roles r ON r._id = ut.role_id
+        )
+        SELECT 
+            id,
+            UPPER(SUBSTRING(username, 1, 2)) AS username_initials,
+            email,
+            team_id,
+            team_name,
+            event_id,
+            event_name,
+            role_id,
+            role_name
+        FROM LatestEntries
+        WHERE row_num = 1 and id = ?`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing getUserAboutPageDetailsQuery:", error);
+        throw error
+    }
+}
+
+export const updateUsernameQuery = async (array) => {
+    try {
+        let query = `UPDATE profiles SET username = ? WHERE id = ? AND is_registered = 1`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing updateUsernameQuery:", error);
+        throw error
+    }
+}
 
 export const getUserNameOfTeamMembersQuery = async (array) => {
     try {
