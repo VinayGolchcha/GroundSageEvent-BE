@@ -11,4 +11,3 @@ CREATE TABLE IF NOT EXISTS tenants (
 ) AUTO_INCREMENT = 1111
 `;
 export default   tenantTable;
-
