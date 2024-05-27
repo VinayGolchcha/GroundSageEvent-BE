@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
-import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getUserAboutPageDetailsQuery, updateUsernameQuery} from "../model/profileQuery.js"
+import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getCoordinatorRole, getUserAboutPageDetailsQuery, updateUsernameQuery} from "../model/profileQuery.js"
 dotenv.config();
 
 
@@ -67,7 +67,8 @@ export const userLogin = async (req, res, next) => {
         });
         await insertTokenQuery([token, currentUser.id]);
         const [user_event_data] = await getUserEventAndRoleDataQuery([currentUser.id]);
-        const { event_id = "", event_name = "", role_id = "", role_name = "" } = user_event_data[0] || {};
+        const [default_role] = await getCoordinatorRole()
+        const { event_id = "", event_name = "", role_id = default_role[0].role_id, role_name = default_role[0].role_name } = user_event_data[0] || {};
         return successResponse(res, [{
             user_id: currentUser.id,
             user_name: currentUser.username,

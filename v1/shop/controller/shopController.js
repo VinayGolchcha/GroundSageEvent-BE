@@ -48,7 +48,7 @@ export const getLastShopNumber =  async (req, res, next) => {
         }else{
             shop_number = shop_data[0].shop_number + 1
         }
-        return successResponse(res, {shop_number: shop_number} ,`Assigning ${shop_number} this shop number for creation.`);
+        return successResponse(res, {shop_number: shop_number} ,`New shop number ${shop_number} created.`);
     } catch (error) {
         next(error);
     }
