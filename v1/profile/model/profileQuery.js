@@ -158,7 +158,7 @@ export const getUserAboutPageDetailsQuery = async(array)=>{
                 r.role_name,
                 ROW_NUMBER() OVER (PARTITION BY p.id ORDER BY ut.created_at DESC) AS row_num
             FROM profiles AS p
-            LEFT JOIN userteams ut ON ut.user_id = p.id
+            LEFT JOIN userTeams ut ON ut.user_id = p.id
             LEFT JOIN teams t ON t.id = ut.team_id
             LEFT JOIN events e ON e.id = t.event_id
             LEFT JOIN roles r ON r._id = ut.role_id
