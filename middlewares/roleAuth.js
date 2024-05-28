@@ -35,15 +35,15 @@ export const authenticateToken = async (req, res, next) => {
                         if (String(token) === String(accessDetails[0].auth_token)) {
                             req.decoded = decoded;
                             const getUserRole = async (array) => {
-                                const query = `SELECT ut.role_id, r.role_name, r.read_access, r.write_access, r.edit_access, r.delete_access
-                                FROM userTeams AS ut
-                                INNER JOIN roles AS r ON ut.role_id = r._id
-                                WHERE ut.user_id = ? AND ut.role_id = ?
-                                ORDER BY ut.created_at DESC
-                                LIMIT 1;`
+                                const query = `SELECT * from roles WHERE _id = ?`
                                 return pool.query(query, array);
                             }
-                            let [user_role] = await getUserRole([decoded.id, role_id]);
+                            let [user_role] = await getUserRole([role_id]);
+                            if(user_role.length==0){ return res.send({
+                                statusCode: 440,
+                                status: 'failure',
+                                message: 'Invalid role id'
+                            })}
                             let read_access = user_role[0].read_access
                             let write_access = user_role[0].write_access
                             let edit_access = user_role[0].edit_access
