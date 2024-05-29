@@ -82,9 +82,9 @@ export const getEventsByUserId = async (userId) => {
         let query = `
                 SELECT 
                 userEvents.user_id, 
-                images.image_url, 
-                images.original_filename, 
-                images.public_id, 
+                GROUP_CONCAT(images.image_url) AS image_urls,
+                GROUP_CONCAT(images.original_filename) AS original_filenames,
+                GROUP_CONCAT(images.public_id) AS public_ids,
                 events.*
             FROM 
                 events 
@@ -93,7 +93,9 @@ export const getEventsByUserId = async (userId) => {
             LEFT JOIN 
                 images ON events.id = images.event_id
             WHERE 
-                userEvents.user_id = ?;
+                userEvents.user_id = ?
+            GROUP BY
+                userEvents.user_id, events.id;
     `;
 
         return pool.query(query,userId);

@@ -127,7 +127,31 @@ export const getAllUserEvents = async (req, res, next) => {
         if (data.length == 0) {
             return errorResponse(res, '', 'Data not found.');
         }
-        return successResponse(res, data, 'Events fetched successfully.');
+
+        const events = data.map(row => {
+            const imageUrls = row.image_urls ? row.image_urls.split(',') : [];
+            const originalFilenames = row.original_filenames ? row.original_filenames.split(',') : [];
+            const publicIds = row.public_ids ? row.public_ids.split(',') : [];
+
+            const images = imageUrls.map((image_url, index) => ({
+                image_url,
+                original_filename: originalFilenames[index],
+                public_id: publicIds[index]
+            }));
+
+            return {
+                user_id: row.user_id,
+                id: row.id,
+                event_name: row.event_name,
+                event_description: row.event_description,
+                start_date: row.start_date,
+                end_date: row.end_date,
+                created_at: row.created_at,
+                updated_at: row.updated_at,
+                images
+            };
+        });
+        return successResponse(res, events, 'Events fetched successfully.');
     } catch (error) {
         next(error);
     }
