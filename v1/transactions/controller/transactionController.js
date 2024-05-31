@@ -68,7 +68,7 @@ export const updateTransaction = async (req, res, next) => {
         }
         const query_values = await createDynamicUpdateQuery("transactions", condition, req_data);
         await updateTransactionQuery(query_values.updateQuery, query_values.updateValues)
-        return successResponse(res, 'Transaction updated successfully');
+        return successResponse(res,"",'Transaction updated successfully');
     } catch (error) {
         next(error);
     }
