@@ -166,7 +166,6 @@ export const deleteRolesVal = [
  export const addRentalAndTenantAgreementVal= [
     body('shop_id').isInt().withMessage('Invalid shop_id input.').notEmpty().withMessage(' shop id cannot be empty.'),
     body('rent_amount').isInt().withMessage('Invalid rent amount input.').notEmpty().withMessage(' rent amount cannot be empty.'),
-    body('id_document').isURL().withMessage('Invalid id document input.').notEmpty().withMessage(' id document cannot be empty.'),
     body('start_date').isDate().withMessage('Invalid start date input.').notEmpty().withMessage(' shop id cannot be empty.'),
     body('end_date').isDate().withMessage('Invalid end date input.').notEmpty().withMessage(' start date cannot be empty.'),
     body('rent_mode').isIn(['day','week','month']).withMessage('Invalid rent mode input.').notEmpty().withMessage(' rent mode cannot be empty.'),

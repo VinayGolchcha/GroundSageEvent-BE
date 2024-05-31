@@ -13,7 +13,7 @@ export const addRentalAndTenantAgreementQuery = async (array2) => {
 
 export const addTenantQuery = async (array1) =>{
   try {
-    let query1 = `INSERT INTO tenants(name,email,phone_number,address,id_document) VALUES (?,?,?,?,?)`;
+    let query1 = `INSERT INTO tenants(name,email,phone_number,address) VALUES (?,?,?,?)`;
     return pool.query(query1, array1);
   } catch (error) {
     console.error("Error executing addTenantQuery:", error);

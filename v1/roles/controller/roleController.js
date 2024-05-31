@@ -80,7 +80,7 @@ export const updateRole= async (req, res, next) => {
     };
     const query_values = await createDynamicUpdateQuery("roles", condition, req_data);
     await updateRoleQuery(query_values.updateQuery, query_values.updateValues);
-    return successResponse(res, "Role updated successfully");
+    return successResponse(res, "", "Role updated successfully");
   } catch (error) {
     next(error);
   }

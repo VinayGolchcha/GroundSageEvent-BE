@@ -12,17 +12,17 @@ export const addRentalAndTenantAgreement = async (req, res, next) => {
       return errorResponse(res, errors.array(), "");
     }
     const file = req.file;
-    const { name, email, phone_number, address, id_document, shop_id, start_date, end_date, rent_amount, rent_mode, event_id} = req.body;
-    const array1 = [name, email, phone_number, address, id_document];
+    const { name, email, phone_number, address, shop_id, start_date, end_date, rent_amount, rent_mode, event_id} = req.body;
+    const tenant_data = [name, email, phone_number, address];
     const [shop_data] = await checkShopExistsQuery([shop_id])
     if(shop_data[0].count==0){
       return notFoundResponse(res, "", "Shop with this id doesn't exists.");
     }
 
-    const [data] = await addTenantQuery(array1);
+    const [data] = await addTenantQuery(tenant_data);
     let tenant_id = data.insertId;
-    const array2 = [shop_id, tenant_id, start_date, end_date, rent_amount, rent_mode, event_id]; 
-    const [agreement_data] = await addRentalAndTenantAgreementQuery(array2);
+    const rental_data = [shop_id, tenant_id, start_date, end_date, rent_amount, rent_mode, event_id]; 
+    const [agreement_data] = await addRentalAndTenantAgreementQuery(rental_data);
 
     const file_buffer = file.buffer
     const file_name = file.originalname
