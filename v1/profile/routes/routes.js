@@ -16,7 +16,7 @@ app.post('/get-user-current-team-event-data',authenticateToken,getCurrentEventTe
 app.post('/get-all-user-events',authenticateToken,getCurrentEventTeamUserIdVal, getAllEventsBasedOnUserId)
 app.post('/get-user-event-and-team-count',authenticateToken,getCurrentEventTeamUserIdVal, getUserEventAndTeamCount)
 app.post('/get-user-about-page-data',authenticateToken, getUserAboutPageVal, getAboutPageDetails)
-router.get('/logout/:id', userLogout);
+app.get('/logout/:id',authenticateToken, userLogout);
 
 app.use("/", router);
 

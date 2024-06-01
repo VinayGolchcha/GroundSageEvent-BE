@@ -227,11 +227,23 @@ export const getUserEventAndTeamCount = async(req, res, next) => {
         }
         const {user_id} = req.body;
         const [count] = await getUserEventAndTeamCountQuery([user_id, user_id])
-        const [members] = await getUserNameOfTeamMembersQuery([user_id])
-        if (count.length == 0) {
-            return notFoundResponse(res, '', 'Data not found');
-        }
-        return successResponse(res, {count, members:members}, 'Events and teams count fetched successfully.')
+        const [event_data] = await getUserNameOfTeamMembersQuery([user_id])
+        const events = event_data.reduce((acc, row) => {
+            const { username, event_name } = row;
+            if (!acc[event_name]) {
+                acc[event_name] = new Set();
+            }
+            acc[event_name].add(username);
+            return acc;
+        }, {});
+        const result = Object.keys(events).map(event_name => {
+            const members = Array.from(events[event_name])
+            return {
+            event_name,
+            members,
+            member_count: members.length
+        }});
+        return successResponse(res, {count: count[0], event_data:result}, 'Events and teams count fetched successfully.')
     } catch (error) {
         next(error);
     }
