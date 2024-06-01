@@ -18,6 +18,11 @@ export const addRentalAndTenantAgreement = async (req, res, next) => {
     if(shop_data[0].count==0){
       return notFoundResponse(res, "", "Shop with this id doesn't exists.");
     }
+    const [is_shop_exists] = await fetchRentalAgreementQuery([shop_id, event_id]);
+    
+    if(is_shop_exists.length>0){
+      return notFoundResponse(res, "", "Shop agreement already exists!")
+    }
 
     const [data] = await addTenantQuery(tenant_data);
     let tenant_id = data.insertId;
@@ -40,10 +45,10 @@ export const fetchRentalAgreement = async (req, res, next) => {
     if (!errors.isEmpty()) {
       return errorResponse(res, errors.array(), "");
     }
-    const { _id, shop_id } = req.body;
-     const [data] = await fetchRentalAgreementQuery([_id, shop_id]);
+    const { shop_id, event_id } = req.body;
+     const [data] = await fetchRentalAgreementQuery([shop_id, event_id]);
     if (data.length == 0) {
-      return errorResponse(res, "", "Data not found.");
+      return notFoundResponse(res, "", "Data not found.");
     }
     return await successResponse(res, data, "Rental Agreement data fetched successfully");
   } catch (error) {

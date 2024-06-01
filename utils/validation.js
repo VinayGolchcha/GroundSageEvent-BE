@@ -177,7 +177,7 @@ export const deleteRolesVal = [
 
  export const fetchRentalAgreementVal =[
     body('shop_id').notEmpty().withMessage('shop_id cannot be empty.').isInt().withMessage("Invalid shop_id input."),
-    body('_id').notEmpty().withMessage('_id cannot be empty.').isInt().withMessage("Invalid _id input.")
+    body('event_id').notEmpty().withMessage('event_id cannot be empty.').isInt().withMessage("Invalid event_id input.")
  ]
     
  export const editRentalAgreementVal =[

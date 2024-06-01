@@ -33,7 +33,20 @@ export const checkShopExistsQuery = async (array) =>{
 
 export const fetchRentalAgreementQuery = (array) => {
   try {
-    let query = `SELECT start_date,end_date,rent_mode,rent_amount FROM rentalagreements WHERE _id = ?  AND shop_id = ?`;
+    let query = `SELECT 
+     ra._id as agreement_id,
+     ra.tenant_id, 
+     t.name AS tenant_name,
+     ra.event_id,
+     e.event_name,
+     ra.start_date,
+     ra.end_date,
+     ra.rent_mode,
+     ra.rent_amount
+    FROM rentalagreements AS ra
+    LEFT JOIN tenants AS t ON ra.tenant_id = t._id
+    LEFT JOIN events AS e ON ra.event_id = e.id
+    WHERE shop_id = ? AND event_id = ?`;
     return pool.query(query, array);
   } catch (error) {
     console.error("Error executing fetchrentalAgreementQuery:", error);
@@ -62,7 +75,6 @@ export const deleteRentalAgreementQuery = async (_id) => {
 
 export const uploadFilesQuery = async(array)=>{
   try {
-      console.log("array", array);
       let query = `INSERT INTO documents (file_name, tenant_id, rental_agreement_id, buffer) VALUES (?,?,?,?)`;
       return await pool.query(query, array);
   } catch (error) {
