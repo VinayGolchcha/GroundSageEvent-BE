@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import {validationResult} from "express-validator"
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js"
 import {createDynamicUpdateQuery} from '../../helpers/functions.js'
 import {uploadImageToCloud, deleteImageFromCloud} from '../../helpers/cloudinary.js';
 import {insertImageForShop, deleteImageQuery, fetchImagesForShopQuery, fetchImagesBasedOnIdForShopQuery} from '../../images/imagesQuery.js';
@@ -35,7 +35,7 @@ export const createShop = async (req, res, next) => {
 
         return successResponse(res, {shop_id: data.insertId, shop_number: shop_number} ,'Shop created successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -50,7 +50,7 @@ export const getLastShopNumber =  async (req, res, next) => {
         }
         return successResponse(res, {shop_number: shop_number} ,`New shop number ${shop_number} created.`);
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -100,7 +100,7 @@ export const updateShop = async(req, res, next) => {
 
         return successResponse(res, 'Shop updated successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -113,7 +113,7 @@ export const getAllShopsByEventId = async (req, res, next) => {
         }
         return successResponse(res, data, 'Shops fetched successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -137,7 +137,7 @@ export const deleteShop = async (req, res, next) => {
         }
         return successResponse(res, 'Shop deleted successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -153,7 +153,7 @@ export const getShopById = async(req, res, next) =>{
         data.push(image_data)
         return successResponse(res, data, 'Shop fetched successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -171,6 +171,6 @@ export const getShopOccupancyDetails = async(req, res, next) => {
         }
         return successResponse(res, data, 'Shop occupancy details fetched successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }

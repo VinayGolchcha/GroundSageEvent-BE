@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import {validationResult} from "express-validator"
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js"
 import {addTransactionQuery, fetchAllTransactionsQuery, fetchTransactionQuery, updateTransactionQuery, deleteTransactionQuery, fetchOutstandingBalanceForIncomeAndExpenseQuery,fetchYearlyDataQuery,fetchAllYearsDataQuery,fetchTenantsReportDataQuery} from "../model/transactionQuery.js"
 import {incrementId, createDynamicUpdateQuery} from "../../helpers/functions.js"
 dotenv.config();
@@ -15,7 +15,7 @@ export const addTransaction = async(req, res, next) =>{
         const [data]= await addTransactionQuery([event_id, tag, type, item, decided_amount, entered_amount, outstanding_amount, remarks]);
         return successResponse(res, data, 'Transaction successfully registered');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -28,7 +28,7 @@ export const fetchAllTransactionsBasedOnEvent = async (req, res, next) => {
         }
         return successResponse(res, data, 'All transactions fetched successfully');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -45,7 +45,7 @@ export const fetchTransactionsBasedOnEvent = async (req, res, next) => {
         }
         return successResponse(res, data, 'Transaction data fetched successfully');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -70,7 +70,7 @@ export const updateTransaction = async (req, res, next) => {
         await updateTransactionQuery(query_values.updateQuery, query_values.updateValues)
         return successResponse(res,"",'Transaction updated successfully');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -89,7 +89,7 @@ export const deleteTransaction = async (req, res, next) => {
         await deleteTransactionQuery([transaction_id, event_id]);
         return successResponse(res, "", 'Transaction deleted successfully');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -106,7 +106,7 @@ export const fetchYearlyData = async (req, res, next) => {
         }
         return successResponse(res, data[0], 'Yearly data fetched successfully');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -123,7 +123,7 @@ export const fetchAllYearsData = async (req, res, next) => {
         }
         return successResponse(res, data, 'Fetch all year data successful');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 };
 
@@ -141,7 +141,7 @@ export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next)
         }
         return successResponse(res, data, `${flag + "ly"} ${type} outstanding fetched successfully.`);
     } catch (error) {
-      next(error);
+      return internalServerErrorResponse(res, error);
     }
   };
 
@@ -158,6 +158,6 @@ export const fetchTenantsReportData= async (req, res, next) => {
         }
         return await successResponse(res, data, "Tenants data fetched successfully");
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
