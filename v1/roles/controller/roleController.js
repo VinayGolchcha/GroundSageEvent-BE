@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js";
 import { addRoleQuery, fetchAllRolesQuery, getLastRolesIdQuery, fetchRoleQuery, updateRoleQuery, deleteRoleQuery } from "../model/roleQuery.js";
 import {incrementId,createDynamicUpdateQuery} from "../../helpers/functions.js";
 dotenv.config();
@@ -16,7 +16,7 @@ export const addRole = async (req, res, next) => {
     await addRoleQuery([role_name,read_access,write_access,edit_access,delete_access]);
     return successResponse(res, "", "Roles successfully registered");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -28,7 +28,7 @@ export const fetchAllRoles = async (req, res, next) => {
       }
     return successResponse(res, data, "Roles successfully fetched");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -42,7 +42,7 @@ export const deleteRole = async (req, res, next) => {
     await deleteRoleQuery(_id);
     return successResponse(res, "", "role deleted successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -59,7 +59,7 @@ export const fetchRole = async (req, res, next) => {
     }
     return successResponse(res, data, "Role data fetched successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -82,6 +82,6 @@ export const updateRole= async (req, res, next) => {
     await updateRoleQuery(query_values.updateQuery, query_values.updateValues);
     return successResponse(res, "", "Role updated successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };

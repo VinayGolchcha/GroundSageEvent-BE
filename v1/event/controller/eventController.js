@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import { validationResult } from "express-validator"
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js"
 import { createDynamicUpdateQuery, generateReferralCode } from '../../helpers/functions.js'
 import {
     createEventQuery, getEventQuery, getEventsByUserId, getRoleIdQuery, insertUserEventQuery, insertUserTeamQuery,
@@ -69,7 +69,7 @@ export const createEventTeamAndReferralCode = async (req, res, next) => {
         response.push(data)
         return successResponse(res, response, 'Event and team created successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -116,7 +116,7 @@ export const updateEvent = async (req, res, next) => {
         }
         return successResponse(res, 'Event updated successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -153,7 +153,7 @@ export const getAllUserEvents = async (req, res, next) => {
         });
         return successResponse(res, events, 'Events fetched successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -167,7 +167,7 @@ export const getAllUserEvents = async (req, res, next) => {
 //         await deleteEventQuery([event_id]);
 //         return successResponse(res, 'Event deleted successfully.');
 //     } catch (error) {
-//         next(error);
+//         return internalServerErrorResponse(res, error);
 //     }
 // }
 
@@ -209,6 +209,6 @@ export const joinUserTeamWithReferralCode = async (req, res, next) => {
         }
         return successResponse(res, data, 'User joined event and team successfully.')
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }

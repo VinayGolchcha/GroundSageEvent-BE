@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js";
 import { addTeamQuery, fetchAllTeamsQuery, fetchTeamQuery, updateTeamQuery, deleteTeamQuery } from "../model/teamQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
@@ -13,7 +13,7 @@ export const fetchAllTeams = async (req, res, next) => {
     }
     return successResponse(res, data, "All teams fetched successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -30,7 +30,7 @@ export const fetchTeam = async (req, res, next) => {
     }
     return successResponse(res, data, "Team data fetched successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -53,7 +53,7 @@ export const updateTeam = async (req, res, next) => {
     await updateTeamQuery(query_values.updateQuery, query_values.updateValues)
     return successResponse(res, 'Team updated successfully');
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 }
 
@@ -71,6 +71,6 @@ export const updateTeam = async (req, res, next) => {
 //     await deleteTeamQuery([id]);
 //     return successResponse(res, "", 'Team deleted successfully');
 //   } catch (error) {
-//     next(error);
+//     return internalServerErrorResponse(res, error);
 //   }
 // }

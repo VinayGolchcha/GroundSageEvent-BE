@@ -1,6 +1,6 @@
 import dotenv from "dotenv"
 import { validationResult } from "express-validator"
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js";
 import{ fetchUserDataQuery, fetchLiveEventsDataQuery } from "../model/homeQuery.js"
 
 
@@ -22,6 +22,6 @@ export const homePage = async (req, res, next) => {
         event_data.push(data[0])
         return successResponse(res, event_data, 'Data Fetched successfully.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }

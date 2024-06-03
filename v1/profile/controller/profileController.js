@@ -3,7 +3,7 @@ import {validationResult} from "express-validator"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js"
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js"
 import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getCoordinatorRole, getUserAboutPageDetailsQuery, updateUsernameQuery} from "../model/profileQuery.js"
 dotenv.config();
 
@@ -29,7 +29,7 @@ export const userRegistration = async (req, res, next) => {
         ]);
         return successResponse(res, "", 'User successfully registered');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 };
 
@@ -81,7 +81,7 @@ export const userLogin = async (req, res, next) => {
         }],
             message);
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 };
 
@@ -91,7 +91,7 @@ export const userLogout = async (req, res, next) => {
         await insertTokenQuery(["", user_id]);
         return successResponse(res, '', `You have successfully logged out!`);
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -114,7 +114,7 @@ export const updateUserPassword = async (req, res, next) => {
             return errorResponse(res, '', 'Password and confirm password must be same, please try again.');
         }
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -135,7 +135,7 @@ export const sendOtpForEmailVerification = async (req, res, next) => {
             return successResponse(res, data, 'OTP for email verification has been sent successfully.');
         }
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -160,7 +160,7 @@ export const verifyEmail = async (req, res, next) => {
             return errorResponse(res, '', 'Invalid OTP');
         }
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -179,7 +179,7 @@ export const checkEmailVerification = async (req, res, next) => {
         user_data = user_data[0];
         return successResponse(res, { is_email_verified: user_data.is_email_verified }, 'Email verification status.');
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -197,7 +197,7 @@ export const getCurrentEventTeamAndRoleBasedOnUserId = async(req, res, next)=>{
         }
         return successResponse(res,data, 'Data fetched successfully.')
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -215,7 +215,7 @@ export const getAllEventsBasedOnUserId = async(req, res, next) => {
         }
         return successResponse(res, data, 'Data fetched successfully.')
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -245,7 +245,7 @@ export const getUserEventAndTeamCount = async(req, res, next) => {
         }});
         return successResponse(res, {count: count[0], event_data:result}, 'Events and teams count fetched successfully.')
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
 
@@ -265,6 +265,6 @@ export const getAboutPageDetails = async (req, res, next) => {
         }
         return successResponse(res, user_data, 'User about page data fetched successfully.')
     } catch (error) {
-        next(error);
+        return internalServerErrorResponse(res, error);
     }
 }
