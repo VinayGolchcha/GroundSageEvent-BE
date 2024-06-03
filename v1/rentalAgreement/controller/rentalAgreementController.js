@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js";
 import { addRentalAndTenantAgreementQuery, fetchRentalAgreementQuery, editRentalAgreementQuery, deleteRentalAgreementQuery, addTenantQuery, checkShopExistsQuery, uploadFilesQuery } from "../model/rentalAgreementQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
@@ -35,7 +35,7 @@ export const addRentalAndTenantAgreement = async (req, res, next) => {
 
     return successResponse(res,{id:agreement_data.insertId},"Rental And Tenant Agreement successfully registered" );
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -52,7 +52,7 @@ export const fetchRentalAgreement = async (req, res, next) => {
     }
     return await successResponse(res, data, "Rental Agreement data fetched successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -66,14 +66,14 @@ export const editRentalAgreement = async (req, res, next) => {
     const shop_id = req.params.shopid;
     const _id = req.params.id;
     const condition = {
-      shopid: shop_id,
-      id: _id
+      shop_id: shop_id,
+      _id: _id
     };
     const query_values = await createDynamicUpdateQuery("rentalagreements", condition, req_data);
     await editRentalAgreementQuery(query_values.updateQuery, query_values.updateValues);
     return successResponse(res, "rental agreement updated successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 export const deleteRentalAgreement = async (req, res, next) => {
@@ -86,7 +86,7 @@ export const deleteRentalAgreement = async (req, res, next) => {
     await deleteRentalAgreementQuery([_id]);
     return successResponse(res, "", "Rental agreement details deleted successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 

@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
-import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse } from "../../../utils/response.js";
+import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js";
 import { createNoteQuery, fetchNoteQuery, updateNoteQuery, deleteNoteQuery } from "../model/noteQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
@@ -15,7 +15,7 @@ export const createNote= async (req, res, next) => {
       const [data] = await createNoteQuery([event_id,user_id,notes_heading,notes_description,date]);
       return successResponse(res, {note_id:data.insertId}, "Notes successfully created");
     } catch (error) {
-      next(error);
+      return internalServerErrorResponse(res, error);
     }
   };
 
@@ -33,7 +33,7 @@ export const fetchNotesById = async (req, res, next) => {
     }
     return await successResponse(res, data, "Notes data fetched successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
@@ -52,7 +52,7 @@ export const updateNote = async (req, res, next) => {
    await updateNoteQuery(query_values.updateQuery, query_values.updateValues);
    return successResponse(res, "notes updated successfully");
    } catch (error) {
-     next(error);
+     return internalServerErrorResponse(res, error);
    }
  };
 
@@ -67,7 +67,7 @@ export const deleteNote = async (req, res, next) => {
     console.log(data);
     return successResponse(res, "", " notes deleted successfully");
   } catch (error) {
-    next(error);
+    return internalServerErrorResponse(res, error);
   }
 };
 
