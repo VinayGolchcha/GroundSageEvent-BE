@@ -66,8 +66,8 @@ export const editRentalAgreement = async (req, res, next) => {
     const shop_id = req.params.shopid;
     const _id = req.params.id;
     const condition = {
-      shopid: shop_id,
-      id: _id
+      shop_id: shop_id,
+      _id: _id
     };
     const query_values = await createDynamicUpdateQuery("rentalagreements", condition, req_data);
     await editRentalAgreementQuery(query_values.updateQuery, query_values.updateValues);
