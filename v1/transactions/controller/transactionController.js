@@ -135,7 +135,7 @@ export const fetchOutstandingBalanceForIncomeAndExpense = async (req, res, next)
             return errorResponse(res, errors.array(), "")
         }
         const {flag,type,event_id} = req.body;
-        const [data] = await fetchOutstandingBalanceForIncomeAndExpenseQuery([flag,type, event_id]);
+        const [data] = await fetchOutstandingBalanceForIncomeAndExpenseQuery(event_id,type, flag);
         if (data.length==0) {
             return errorResponse(res, '', 'Data not found.');
         }
