@@ -277,7 +277,7 @@ export const fetchTenantsReportDataQuery = (array) => {
             tenants ON rentalagreements.tenant_id = tenants._id
         WHERE
             rentalagreements.event_id = ?
-            AND start_date >= ?
+            AND end_date >= ?
             AND end_date <= ?;
         `
         return pool.query(query, array);
