@@ -131,7 +131,7 @@ export const sendOtpForEmailVerification = async (req, res, next) => {
         if (otp_data[0].changedRows === 0) {
             return errorResponse(res, '', 'Sorry, user not found. Please take a moment to register for an account.');
         } else {
-            const data = await sendMail(email, `${otp} is the OTP for email verification!\n\n\n\nRegards,\nAmarya Business Consultancy`, 'Email Verification');
+            const data = await sendMail(email, `${otp} is the OTP for email verification!\n\n\n\nRegards,\nEvent Sage Community`, 'Email Verification');
             return successResponse(res, data, 'OTP for email verification has been sent successfully.');
         }
     } catch (error) {

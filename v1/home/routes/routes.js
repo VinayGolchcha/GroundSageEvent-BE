@@ -2,10 +2,11 @@ import express, { Router } from 'express';
 const app = express()
 const router = Router();
 
-import { homePage } from '../../home/controller/homeController.js'
-import { homePageIdVal } from '../../../utils/validation.js';
+import { homePage, userFeedback } from '../../home/controller/homeController.js'
+import { homePageIdVal, userFeedbackVal } from '../../../utils/validation.js';
 
 app.get('/home-page/:id', homePageIdVal, homePage)
+app.post('/send-feedback',userFeedbackVal, userFeedback)
 
 app.use("/", router);
 

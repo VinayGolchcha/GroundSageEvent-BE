@@ -42,3 +42,31 @@ export const fetchLiveEventsDataQuery =(array) =>{
         throw error;
     }
 }
+
+export const getTenantCoordinatorQuery =(array) =>{
+    try {
+        let query = `SELECT p2.email AS coordinator_email, p1.username AS sender_name
+        FROM profiles p1
+        JOIN userTeams ut1 ON p1.id = ut1.user_id
+        JOIN userTeams ut2 ON ut1.team_id = ut2.team_id
+        JOIN profiles p2 ON ut2.user_id = p2.id
+        JOIN roles r ON ut2.role_id = r._id
+        WHERE p1.email = ? AND r.role_name = 'coordinator'
+        ORDER BY ut2.created_at DESC LIMIT 1;
+        `
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing getTenantCoordinatorQuery:", error);
+        throw error;
+    }
+}
+
+export const insertUserFeedbackQuery =(array) =>{
+    try {
+        let query = `INSERT INTO feedbacks (sender_email, receiver_email, feedback) VALUES (?,?,?)`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing insertUserFeedbackQuery:", error);
+        throw error;
+    }
+}
