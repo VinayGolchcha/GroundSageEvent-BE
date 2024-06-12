@@ -19,7 +19,7 @@ export const createShop = async (req, res, next) => {
         let {event_id, shop_number, dome, description, area, rent, location, status} = req.body;
         status = status.toLowerCase();
         description = description.toLowerCase();
-        dome = dome.toLowerCase();
+        dome = dome.toUpperCase();
         const [isExists] = await checkShopNumberQuery(shop_number);
         if (isExists[0].count > 0) {
             return notFoundResponse(res, "", `Shop number ${shop_number} already exists, please choose different shop number.`);
