@@ -9,8 +9,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const sendMail = async (email, body, subject) => {
+export const sendMail = async (email, body, subject, username) => {
+    username = username || "Anonymous"
     const mailOptions = {
+        from: `${username} <${process.env.NODEMAILER_USER}>`,
         to: email,
         subject: subject,
         text: body,

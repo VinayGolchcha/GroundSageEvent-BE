@@ -250,3 +250,8 @@ export const fetchTenantsReportDataVal = [
 export const homePageIdVal = [
     param('id').notEmpty().withMessage('id cannot be empty.').isInt().withMessage("Invalid id input.")
 ]
+
+export const userFeedbackVal = [
+    body('email').isEmail().withMessage('Invalid email input.').notEmpty().withMessage('Email cannot be empty.'),
+    body('feedback').notEmpty().withMessage('feedback cannot be empty.').isString().withMessage("Invalid feedback input."),
+]
