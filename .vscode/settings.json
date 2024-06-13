@@ -22,6 +22,19 @@
             "database": "groundsage",
             "username": "root",
             "askForPassword": true
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "43.204.143.53",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "amarya",
+            "database": "eventsage",
+            "username": "admin"
         }
     ]
 }

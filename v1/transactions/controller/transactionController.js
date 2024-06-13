@@ -152,7 +152,7 @@ export const fetchTenantsReportData= async (req, res, next) => {
         return errorResponse(res, errors.array(), "");
         }
         const { event_id,from_date,to_date} = req.body;
-        const [data] = await fetchTenantsReportDataQuery([event_id,from_date,to_date]);
+        const [data] = await fetchTenantsReportDataQuery(event_id,from_date,to_date);
         if (data.length == 0) {
         return notFoundResponse(res, "", "Data not found.");
         }
