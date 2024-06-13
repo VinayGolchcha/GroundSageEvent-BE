@@ -263,26 +263,37 @@ export const fetchAllYearsDataQuery = async (event_id, tag, flag) => {
     }
 }
 
-export const fetchTenantsReportDataQuery = (array) => {
+export const fetchTenantsReportDataQuery = (event_id, from_date, to_date) => {
     try {
-      let query = `
+        const params = [
+            event_id,
+            from_date,
+            to_date,
+            from_date,
+            to_date,
+            from_date,
+            to_date
+        ];
+        let query = `
             SELECT
-            rentalagreements.tenant_id AS tenant_id,
-            tenants.name AS tenant_name,
-            DATE_FORMAT(start_date, '%d-%m-%y') AS start_date,
-            DATE_FORMAT(end_date, '%d-%m-%y') AS end_date
-        FROM
-            rentalagreements
-        LEFT JOIN
-            tenants ON rentalagreements.tenant_id = tenants._id
-        WHERE
-            rentalagreements.event_id = ?
-            AND end_date >= ?
-            AND end_date <= ?;
-        `
-        return pool.query(query, array);
+                rentalagreements.tenant_id AS tenant_id,
+                tenants.name AS tenant_name,
+                DATE_FORMAT(start_date, '%d-%m-%y') AS start_date,
+                DATE_FORMAT(end_date, '%d-%m-%y') AS end_date
+            FROM
+                rentalagreements
+            LEFT JOIN
+                tenants ON rentalagreements.tenant_id = tenants._id
+            WHERE
+                rentalagreements.event_id = ?
+                AND (
+                    (start_date BETWEEN ? AND ?)
+                    OR (end_date BETWEEN ? AND ?)
+                    OR (start_date <= ? AND end_date >= ?)
+                );`
+        return pool.query(query, params);
     } catch (error) {
-        console.error("Error executing fetchTenantsDataQuery:", error);
+        console.error("Error executing fetchTenantsReportDataQuery:", error);
         throw error;
     }
 };
