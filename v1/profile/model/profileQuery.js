@@ -55,10 +55,11 @@ export const getUserEventAndRoleDataQuery = (array) => {
 
 export const getCoordinatorRole = () => {
     try {
-        let query =  `SELECT _id as role_id, role_name FROM roles WHERE role_name = "coordinator"`
+        let query =  `SELECT _id as role_id, role_name FROM roles WHERE role_name = 'coordinator'`
         return pool.query(query);
     } catch (error) {
-        
+        console.error("Error executing getCoordinatorRole:", error);
+        throw error;
     }
 }
 
