@@ -39,7 +39,10 @@ export const userFeedback = async (req, res, next) => {
         if (user_data.length == 0) {
             return notFoundResponse(res, '', 'User not found');
         }
-        const [data] = await getTenantCoordinatorQuery([email])
+        const [data] = await getTenantCoordinatorQuery([email]);
+        if(data.length == 0 || data[0].coordinator_email == email ) {
+            return notFoundResponse(res, '', 'You cannot send an email.');
+        }
         await insertUserFeedbackQuery([email, data[0].coordinator_email, feedback])
         await sendMail(data[0].coordinator_email, `${feedback}`, 'Feedback received', data[0].sender_name);
         return successResponse(res, "", 'Feedback sent successfully.')

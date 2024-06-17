@@ -35,6 +35,19 @@
             "name": "amarya",
             "database": "eventsage",
             "username": "admin"
+        },
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "mysql-328e3933-aiven-first-project01.l.aivencloud.com",
+            "port": 18377,
+            "driver": "MySQL",
+            "name": "aiven server",
+            "username": "avnadmin",
+            "database": "eventsage"
         }
     ]
 }

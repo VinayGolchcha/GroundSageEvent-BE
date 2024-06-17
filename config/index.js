@@ -13,5 +13,10 @@ import tenantTable from "../v1/rentalAgreement/model/tenantModel.js";
 import noteTable from "../v1/notes/model/noteModel.js";
 import referralCodesTable from "../v1/event/model/referralModel.js";
 import feedbackTable from "../v1/home/model/feedbackModel.js";
+import activationCodeTable from "../v1/admin/model/activationCodeModel.js";
 
-export default [ profileTable,eventTable,teamTable, roleTable,shopTable, imagesTable, transactionTable,tenantTable,rentalAgreementTable, userEventTable, userTeamTable, noteTable, referralCodesTable, documentsTable, feedbackTable];
+export default [ 
+    profileTable, activationCodeTable, eventTable, teamTable, roleTable, shopTable, imagesTable, transactionTable,
+    tenantTable,rentalAgreementTable, userEventTable, userTeamTable, noteTable, referralCodesTable, documentsTable, 
+    feedbackTable
+];
