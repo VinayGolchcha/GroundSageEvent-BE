@@ -4,7 +4,7 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { sendMail } from "../../../config/nodemailer.js"
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js"
-import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getCoordinatorRole, getUserAboutPageDetailsQuery, updateUsernameQuery} from "../model/profileQuery.js"
+import { userDetailQuery, userRegistrationQuery, insertTokenQuery, updateUserPasswordQuery, insertOtpQuery, getOtpQuery, userEmailVerificationQuery, getUserCurrentTeamAndEventDataQuery, getAllEventsForUserQuery, getUserEventAndTeamCountQuery, getUserNameOfTeamMembersQuery, getUserEventAndRoleDataQuery, getCoordinatorRole, getUserAboutPageDetailsQuery, updateUsernameQuery, isValidActivationCodeQuery, insertActivationCountQuery} from "../model/profileQuery.js"
 dotenv.config();
 
 
@@ -15,11 +15,19 @@ export const userRegistration = async (req, res, next) => {
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const { username, email, password } = req.body;
+        const { username, email, password, activation_code } = req.body;
         const [existingUser] = await userDetailQuery([email]);
         if (existingUser.length) {
             return errorResponse(res, '', 'User with this email already exists.');
         }
+
+        const [activation_data] = await isValidActivationCodeQuery([activation_code]);
+        if (!activation_data.length || activation_data[0].used_count >= activation_data[0].count) {
+            return notFoundResponse(res, '', 'Invalid or fully used activation code.');
+        }
+        const new_used_count = activation_data[0].used_count + 1;
+        await insertActivationCountQuery(new_used_count, activation_code);
+
         const password_hash = await bcrypt.hash(password.toString(), 12);
         await userRegistrationQuery([
             username,

@@ -229,3 +229,23 @@ export const getUserNameOfTeamMembersQuery = async (array) => {
         throw error
     }
 }
+
+export const isValidActivationCodeQuery = (array) => {
+    try {
+        let query = `SELECT * FROM activationCodes WHERE activation_code = ?`
+        return pool.query(query, array);
+    } catch (error) {
+        console.error("Error executing isValidActivationCodeQuery:", error);
+        throw error;
+    }
+}
+
+export const insertActivationCountQuery = (used_count, activation_code) => {
+    try {
+        let query = `UPDATE activationCodes SET used_count = ? WHERE activation_code = ?`
+        return pool.query(query, [used_count, activation_code]);
+    } catch (error) {
+        console.error("Error executing isValidActivationCodeQuery:", error);
+        throw error;
+    }
+}
