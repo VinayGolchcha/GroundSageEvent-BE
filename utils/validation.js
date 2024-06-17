@@ -255,3 +255,7 @@ export const userFeedbackVal = [
     body('email').isEmail().withMessage('Invalid email input.').notEmpty().withMessage('Email cannot be empty.'),
     body('feedback').notEmpty().withMessage('feedback cannot be empty.').isString().withMessage("Invalid feedback input."),
 ]
+
+export const generateActivationCodeVal = [
+    body('count').notEmpty().withMessage('count cannot be empty.').isInt().withMessage("Invalid count input.")
+]
