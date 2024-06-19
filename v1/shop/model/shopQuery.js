@@ -41,7 +41,15 @@ export const updateShopQuery = (query, array)=> {
 
 export const getAllShopsByEventIdQuery = async(array) =>{
     try {
-        let query = `SELECT * FROM shops WHERE event_id = ?`
+        let query = `
+        SELECT s.*, ra.end_date
+        FROM shops s
+        LEFT JOIN (
+            SELECT shop_id, MAX(end_date) AS end_date
+            FROM rentalagreements
+            GROUP BY shop_id
+        ) ra ON s.id = ra.shop_id
+        WHERE s.event_id = ?`
         return pool.query(query, array);
     } catch (error) {
         console.error("Error executing getAllShopsByEventIdQuery:", error);
