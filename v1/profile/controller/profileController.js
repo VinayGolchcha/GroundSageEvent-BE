@@ -80,6 +80,7 @@ export const userLogin = async (req, res, next) => {
         return successResponse(res, [{
             user_id: currentUser.id,
             user_name: currentUser.username,
+            email: email,
             is_email_verified: is_email_verified,
             token: token,
             event_id: event_id,
