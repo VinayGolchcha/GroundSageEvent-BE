@@ -24,7 +24,7 @@ export const fetchAllTransactionsBasedOnEvent = async (req, res, next) => {
         const {event_id} = req.body;
         const [data] = await fetchAllTransactionsQuery([event_id]);
         if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
+            return notFoundResponse(res, '', 'Data not found.');
         }
         return successResponse(res, data, 'All transactions fetched successfully');
     } catch (error) {
@@ -41,7 +41,7 @@ export const fetchTransactionsBasedOnEvent = async (req, res, next) => {
         const {transaction_id, event_id} = req.body;
         const [data] = await fetchTransactionQuery([transaction_id, event_id]);
         if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
+            return notFoundResponse(res, '', 'Data not found.');
         }
         return successResponse(res, data, 'Transaction data fetched successfully');
     } catch (error) {
@@ -84,7 +84,7 @@ export const deleteTransaction = async (req, res, next) => {
         const event_id = req.params.event_id;
         const [data] = await fetchTransactionQuery([transaction_id, event_id]);
         if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
+            return notFoundResponse(res, '', 'Data not found.');
         }
         await deleteTransactionQuery([transaction_id, event_id]);
         return successResponse(res, "", 'Transaction deleted successfully');
@@ -102,7 +102,7 @@ export const fetchYearlyData = async (req, res, next) => {
         const {year,type, event_id} = req.body;
         const [data] = await fetchYearlyDataQuery([year,type, event_id]);
         if (data.length==0) {
-            return errorResponse(res, '', 'Data not found.');
+            return notFoundResponse(res, '', 'Data not found.');
         }
         return successResponse(res, data[0], 'Yearly data fetched successfully');
     } catch (error) {
