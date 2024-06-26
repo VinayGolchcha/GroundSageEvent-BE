@@ -11,7 +11,17 @@ export const addTransaction = async(req, res, next) =>{
         if (!errors.isEmpty()) {
             return errorResponse(res, errors.array(), "")
         }
-        const {event_id, tag, type, item, decided_amount, entered_amount, outstanding_amount, remarks} = req.body;
+        let {event_id, tag, type, item, decided_amount, entered_amount, outstanding_amount, remarks} = req.body;
+        tag = tag.toLowerCase();
+        type = type.toLowerCase();
+        if(tag=='income'){
+            if(entered_amount > decided_amount){
+                return notFoundResponse(res, '', 'Received amount cannot be greater than the amount due.');
+            }
+            if(decided_amount != (entered_amount + outstanding_amount)){
+                return notFoundResponse(res, '', 'Amount due should be equal to the sum of received and outstanding amount.');
+            }
+        }
         const [data]= await addTransactionQuery([event_id, tag, type, item, decided_amount, entered_amount, outstanding_amount, remarks]);
         return successResponse(res, data, 'Transaction successfully registered');
     } catch (error) {

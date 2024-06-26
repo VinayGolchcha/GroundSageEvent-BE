@@ -45,10 +45,13 @@ export const fetchRentalAgreementQuery = (array) => {
      ra.start_date,
      ra.end_date,
      ra.rent_mode,
-     ra.rent_amount
+     ra.rent_amount,
+     d.file_name,
+     d.buffer
     FROM rentalagreements AS ra
     LEFT JOIN tenants AS t ON ra.tenant_id = t._id
     LEFT JOIN events AS e ON ra.event_id = e.id
+    LEFT JOIN documents AS d ON ra._id = d.rental_agreement_id
     WHERE shop_id = ? AND event_id = ?`;
     return pool.query(query, array);
   } catch (error) {
