@@ -20,9 +20,9 @@ export const homePage = async (req, res, next) => {
             return notFoundResponse(res, '', 'Data not found.');
         }
 
-        let [event_data] = await fetchLiveEventsDataQuery([user_id])
-        event_data.push(data[0])
-        return successResponse(res, event_data, 'Data Fetched successfully.');
+        let event_data = await fetchLiveEventsDataQuery([user_id])
+        data.push(event_data[0])
+        return successResponse(res, data, 'Data Fetched successfully.');
     } catch (error) {
         return internalServerErrorResponse(res, error);
     }
