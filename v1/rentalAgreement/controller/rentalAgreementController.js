@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { validationResult } from "express-validator";
 import { successResponse, errorResponse, notFoundResponse, unAuthorizedResponse, internalServerErrorResponse } from "../../../utils/response.js";
-import { addRentalAndTenantAgreementQuery, fetchRentalAgreementQuery, editRentalAgreementQuery, deleteRentalAgreementQuery, addTenantQuery, checkShopExistsQuery, uploadFilesQuery } from "../model/rentalAgreementQuery.js";
+import { addRentalAndTenantAgreementQuery, fetchRentalAgreementQuery, editRentalAgreementQuery, deleteRentalAgreementQuery, addTenantQuery, checkShopExistsQuery, uploadFilesQuery, updateShopStatusQuery } from "../model/rentalAgreementQuery.js";
 import { incrementId, createDynamicUpdateQuery } from "../../helpers/functions.js";
 dotenv.config();
 
@@ -28,6 +28,7 @@ export const addRentalAndTenantAgreement = async (req, res, next) => {
     let tenant_id = data.insertId;
     const rental_data = [shop_id, tenant_id, start_date, end_date, rent_amount, rent_mode, event_id]; 
     const [agreement_data] = await addRentalAndTenantAgreementQuery(rental_data);
+    await updateShopStatusQuery([shop_id]);
 
     const file_buffer = file.buffer
     const file_name = file.originalname
