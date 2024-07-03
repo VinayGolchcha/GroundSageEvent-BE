@@ -11,6 +11,16 @@ export const addRentalAndTenantAgreementQuery = async (array2) => {
   }
 };
 
+export const updateShopStatusQuery = async (array) => {
+  try {
+    let query = `UPDATE shops SET status = 'occupied' WHERE id = ?`;
+    return pool.query(query, array);
+  } catch (error) {
+    console.error("Error executing updateShopStatusQuery:", error);
+    throw error;
+  }
+};
+
 export const addTenantQuery = async (array1) =>{
   try {
     let query1 = `INSERT INTO tenants(name,email,phone_number,address) VALUES (?,?,?,?)`;
